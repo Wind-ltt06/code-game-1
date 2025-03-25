@@ -1,15 +1,18 @@
 # depslib dependency file v1.0
-1742830476 source:c:\git\code-game-1\ltnc\main.cpp
+1742912948 source:c:\git\code-game-1\ltnc\main.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
 	"graphics.h"
 	"defs.h"
+	<bits/stdc++.h>
 
-1742830483 c:\git\code-game-1\ltnc\graphics.h
+1742914636 c:\git\code-game-1\ltnc\graphics.h
 	<SDL.h>
 	<SDL_image.h>
 	"defs.h"
+	<iostream>
+	<bits/stdc++.h>
 
-1742830476 c:\git\code-game-1\ltnc\defs.h
+1742879782 c:\git\code-game-1\ltnc\defs.h
 
