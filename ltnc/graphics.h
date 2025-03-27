@@ -7,68 +7,9 @@
 #include "defs.h"
 #include <iostream>
 #include <bits/stdc++.h>
+#include "Wall.h"
+#include "Player.h"
 using namespace std;
-
-class Wall{
-public:
-    int x, y;
-    SDL_Rect rect;
-    bool active;
-
-    Wall(int startX, int startY) {
-        x = startX;
-        y = startY;
-        active = true;
-        rect = {x, y, TILE_SIZE, TILE_SIZE};
-    }
-
-    void render(SDL_Renderer* renderer){
-        if(active){
-            SDL_SetRenderDrawColor(renderer, 150, 75, 0 ,255);  //BROWN COLOR
-            SDL_RenderFillRect(renderer, &rect);
-        }
-    }
-};
-
-class PlayerTank{
-public:
-    int x, y;
-    int dirX, dirY;
-    SDL_Rect rect;
-
-    PlayerTank (int startX, int startY){
-        x = startX;
-        y = startY;
-        rect = {x, y, TILE_SIZE, TILE_SIZE};
-        dirX = 0;
-        dirY = -1;
-    }
-    void move(int dx, int dy, const vector<Wall>& walls) {
-        int newX = x + dx;
-        int newY = y + dy;
-        this->dirX = dx;
-        this->dirY = dy;
-
-        SDL_Rect newRect = {newX, newY, TILE_SIZE, TILE_SIZE};
-        for (int i =0 ; i < walls.size(); i++){
-            if( walls[i].active && SDL_HasIntersection(&newRect, &walls[i].rect)){
-                return;
-            }
-        }
-        if(newX >= TILE_SIZE && newX <= SCREEN_WIDTH - TILE_SIZE * 2 &&
-           newY >= TILE_SIZE && newY <= SCREEN_HEIGHT - TILE_SIZE * 2){
-            x = newX;
-            y = newY;
-            rect.x = x;
-            rect.y = y;
-           }
-    }
-
-    void render(SDL_Renderer* renderer) {
-        SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-        SDL_RenderFillRect(renderer, &rect);
-    }
-};
 
 class Game{
 public:
@@ -77,8 +18,6 @@ public:
     bool running;
     vector<Wall> walls;
 PlayerTank player{(MAP_WIDTH - 1) / 2 * TILE_SIZE, (MAP_HEIGHT - 2) * TILE_SIZE};
-    //....
-
 // create environtment
   Game()
     : player(((MAP_WIDTH - 1) / 2) * TILE_SIZE, (MAP_HEIGHT - 2) * TILE_SIZE) {
@@ -113,22 +52,38 @@ PlayerTank player{(MAP_WIDTH - 1) / 2 * TILE_SIZE, (MAP_HEIGHT - 2) * TILE_SIZE}
         }
     }
     void handleEvents(){
-        SDL_Event event;
-        while (SDL_PollEvent(&event)){
-            if (event.type == SDL_KEYDOWN){
-                running = false;
+    SDL_Event event;
+    while (SDL_PollEvent(&event)){
+        if (event.type == SDL_QUIT) {
+            running = false;
+        }
+        else if( event.type == SDL_KEYDOWN){
+            switch (event.key.keysym.sym){
+                case SDLK_UP: player.move(0, -TILE_SIZE, walls); break;
+                case SDLK_DOWN: player.move(0, TILE_SIZE, walls); break;
+                case SDLK_LEFT: player.move(-TILE_SIZE, 0, walls); break;
+                case SDLK_RIGHT: player.move(TILE_SIZE, 0, walls); break;
+                case SDLK_SPACE: player.shoot(); break;
+                case SDLK_ESCAPE: running = false; break;
             }
-            else if( event.type == SDL_KEYDOWN){
-                switch (event.key.keysym.sym){
-                    case SDLK_UP: player.move(0, -5, walls);break;
-                    case SDLK_DOWN: player.move(0, 5, walls);break;
-                    case SDLK_LEFT: player.move(-5, 0, walls);break;
-                    case SDLK_RIGHT: player.move(5, 0, walls);break;
-                    case SDLK_ESCAPE: running = false; break;
+        }
+    }
+}
+
+    void update(){
+        player.updateBullets();
+
+        for(auto& bullet : player.bullets){
+            for ( auto& wall : walls){
+                if( wall.active && SDL_HasIntersection(&bullet.rect, &wall.rect)){
+                    wall.active = false;
+                    bullet.active = false;
+                    break;
                 }
             }
         }
     }
+
     void render(){
         SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255); // boundaries
         SDL_RenderClear(renderer); // DELETE COLOR
@@ -151,6 +106,7 @@ PlayerTank player{(MAP_WIDTH - 1) / 2 * TILE_SIZE, (MAP_HEIGHT - 2) * TILE_SIZE}
     void run () {
         while(running) {
             handleEvents();
+            update();
             render();
             SDL_Delay(16);
         }

@@ -32,6 +32,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="Bullet.h" />
+		<Unit filename="Player.h" />
 		<Unit filename="Wall.h" />
 		<Unit filename="defs.h" />
 		<Unit filename="graphics.h" />

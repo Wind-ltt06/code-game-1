@@ -7,12 +7,27 @@
 	"defs.h"
 	<bits/stdc++.h>
 
-1742956861 c:\git\code-game-1\ltnc\graphics.h
+1743063299 c:\git\code-game-1\ltnc\graphics.h
 	<SDL.h>
 	<SDL_image.h>
 	"defs.h"
 	<iostream>
 	<bits/stdc++.h>
+	"Wall.h"
+	"Player.h"
 
 1742879782 c:\git\code-game-1\ltnc\defs.h
+
+1743059697 c:\git\code-game-1\ltnc\wall.h
+	<SDL.h>
+	"defs.h"
+
+1743063439 c:\git\code-game-1\ltnc\player.h
+	<SDL.h>
+	"defs.h"
+	"Wall.h"
+	<vector>
+	"Bullet.h"
+
+1743063415 c:\git\code-game-1\ltnc\bullet.h
 
