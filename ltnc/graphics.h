@@ -51,27 +51,28 @@ PlayerTank player{(MAP_WIDTH - 1) / 2 * TILE_SIZE, (MAP_HEIGHT - 2) * TILE_SIZE}
             }
         }
     }
-    void handleEvents(){
+  void handleEvents() {
     SDL_Event event;
-    while (SDL_PollEvent(&event)){
+    while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             running = false;
         }
-        else if( event.type == SDL_KEYDOWN){
-            switch (event.key.keysym.sym){
-                case SDLK_UP: player.move(0, -TILE_SIZE, walls); break;
-                case SDLK_DOWN: player.move(0, TILE_SIZE, walls); break;
-                case SDLK_LEFT: player.move(-TILE_SIZE, 0, walls); break;
-                case SDLK_RIGHT: player.move(TILE_SIZE, 0, walls); break;
-                case SDLK_SPACE: player.shoot(); break;
+        else if (event.type == SDL_KEYDOWN) {
+            switch (event.key.keysym.sym) {
+                case SDLK_UP: player.move(0, -5, walls); break;
+                case SDLK_DOWN: player.move(0, 5, walls); break;
+                case SDLK_LEFT: player.move(-5, 0, walls); break;
+                case SDLK_RIGHT: player.move(5, 0, walls); break;
+                case SDLK_SPACE: player.shoot(); break; // Thêm xử lý bắn đạn
                 case SDLK_ESCAPE: running = false; break;
             }
         }
     }
 }
 
+
     void update(){
-        player.updateBullets();
+        player.updateBullets(walls);
 
         for(auto& bullet : player.bullets){
             for ( auto& wall : walls){

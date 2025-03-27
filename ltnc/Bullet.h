@@ -16,18 +16,27 @@ public:
         rect = {x, y, 10, 10}; // Kích thước viên đạn
     }
 
-    void move() {
-        x += dx * speed; // Nhân thêm hệ số tốc độ
-        y += dy * speed;
-        rect.x = x;
-        rect.y = y;
+  void move(const std::vector<Wall>& walls) {
+    x += dx;
+    y += dy;
+    rect.x = x;
+    rect.y = y;
 
-        // Kiểm tra nếu đạn ra khỏi màn hình thì tắt
-        if (x < TILE_SIZE || x > SCREEN_WIDTH - TILE_SIZE ||
-            y < TILE_SIZE || y > SCREEN_HEIGHT - TILE_SIZE) {
-            active = false;
+    // Kiểm tra va chạm với tường
+    for (const auto& wall : walls) {
+        if (wall.active && SDL_HasIntersection(&rect, &wall.rect)) {
+            active = false; // Đạn biến mất, nhưng tường vẫn còn
+            return;
         }
     }
+
+    // Nếu ra ngoài màn hình thì biến mất
+    if (x < TILE_SIZE || x > SCREEN_WIDTH - TILE_SIZE ||
+        y < TILE_SIZE || y > SCREEN_HEIGHT - TILE_SIZE) {
+        active = false;
+    }
+}
+
 
     void render(SDL_Renderer* renderer) {
         if (active) {
