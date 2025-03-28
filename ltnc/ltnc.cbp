@@ -36,6 +36,7 @@
 		<Unit filename="Player.h" />
 		<Unit filename="Wall.h" />
 		<Unit filename="defs.h" />
+		<Unit filename="enemytank.h" />
 		<Unit filename="graphics.h" />
 		<Unit filename="main.cpp" />
 		<Extensions />

@@ -1,3 +1,15 @@
+
+#ifndef Bullet_H
+#define Bullet_H
+
+#include <SDL.h>
+#include "defs.h"
+#include "Wall.h"
+#include <vector>
+#include "Bullet.h"
+
+
+
 class Bullet {
 public:
     int x, y;
@@ -45,3 +57,4 @@ public:
         }
     }
 };
+#endif
