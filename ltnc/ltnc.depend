@@ -7,7 +7,7 @@
 	"defs.h"
 	<bits/stdc++.h>
 
-1743411602 c:\git\code-game-1\ltnc\graphics.h
+1743445180 c:\git\code-game-1\ltnc\graphics.h
 	<SDL.h>
 	<SDL_image.h>
 	"defs.h"
@@ -23,12 +23,13 @@
 	<SDL.h>
 	"defs.h"
 
-1743083610 c:\git\code-game-1\ltnc\player.h
+1743445126 c:\git\code-game-1\ltnc\player.h
 	<SDL.h>
 	"defs.h"
 	"Wall.h"
 	<vector>
 	"Bullet.h"
+	<cmath>
 
 1743155600 c:\git\code-game-1\ltnc\bullet.h
 	<SDL.h>
@@ -37,7 +38,7 @@
 	<vector>
 	"Bullet.h"
 
-1743411834 c:\git\code-game-1\ltnc\enemytank.h
+1743445367 c:\git\code-game-1\ltnc\enemytank.h
 	<SDL.h>
 	"defs.h"
 	"Wall.h"

@@ -1,4 +1,3 @@
-
 #ifndef _GRAPHICS__H
 #define _GRAPHICS__H
 
@@ -59,18 +58,47 @@ public:
     }
   void handleEvents() {
     SDL_Event event;
+
+    // Biến để theo dõi phím đang được nhấn
+    int dx = 0, dy = 0;
+
+    // Lấy trạng thái của tất cả các phím
+    const Uint8* keystate = SDL_GetKeyboardState(NULL);
+
+    // Kiểm tra các phím mũi tên và cập nhật dx, dy
+    if (keystate[SDL_SCANCODE_UP]) {
+        dy = -1;
+        dx = 0;
+    }
+    else if (keystate[SDL_SCANCODE_DOWN]) {
+        dy = 1;
+        dx = 0;
+    }
+    else if (keystate[SDL_SCANCODE_LEFT]) {
+        dx = -1;
+        dy = 0;
+    }
+    else if (keystate[SDL_SCANCODE_RIGHT]) {
+        dx = 1;
+        dy = 0;
+    }
+
+    // Di chuyển tank theo dx, dy
+    player.move(dx, dy, walls);
+
+    // Xử lý các sự kiện khác
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             running = false;
         }
         else if (event.type == SDL_KEYDOWN) {
             switch (event.key.keysym.sym) {
-                case SDLK_UP: player.move(0, -5, walls); break;
-                case SDLK_DOWN: player.move(0, 5, walls); break;
-                case SDLK_LEFT: player.move(-5, 0, walls); break;
-                case SDLK_RIGHT: player.move(5, 0, walls); break;
-                case SDLK_SPACE: player.shoot(); break; // Thêm xử lý bắn đạn
-                case SDLK_ESCAPE: running = false; break;
+                case SDLK_SPACE:
+                    player.shoot();
+                    break;
+                case SDLK_ESCAPE:
+                    running = false;
+                    break;
             }
         }
     }
@@ -78,7 +106,8 @@ public:
 
 
     void update(){
-        player.updateBullets(walls);
+
+    player.updateBullets(walls);
 
         for(auto& bullet : player.bullets){
             for ( auto& wall : walls){
@@ -105,11 +134,10 @@ public:
         }
 
         for(auto &enemy : enemies){
-                for (auto& enemy : enemies) {
-    enemy.move(walls, player.x, player.y);
-}
+            // Truyền thêm player.bullets vào hàm move để tank có thể né đạn
+            enemy.move(walls, player.x, player.y, player.bullets);
             enemy.updateBullets();
-            if( rand() % 100 < 2){
+            if(rand() % 100 < 1){ // Giảm tỉ lệ bắn xuống 1%
                 enemy.shoot();
             }
         }
@@ -146,20 +174,21 @@ public:
                 ex = (rand() % (MAP_WIDTH - 2) + 1) * TILE_SIZE;
                 ey = (rand() % (MAP_HEIGHT - 2) + 1) * TILE_SIZE;
                 validPosition = true;
-                while(!validPosition){
-                    ex = (rand() % (MAP_WIDTH - 2) + 1) * TILE_SIZE;
-                     ey = (rand() % (MAP_HEIGHT - 2) + 1) * TILE_SIZE;
-                     validPosition = true;
-                     for ( const auto& wall : walls){
-                        if(wall.active && wall.x == ex && wall.y == ey){
-                            validPosition = false;
-                            break;
-                        }
-                     }
+                for (const auto& wall : walls){
+                    if(wall.active && wall.x == ex && wall.y == ey){
+                        validPosition = false;
+                        break;
+                    }
                 }
-                enemies.push_back(EnemyTank(ex, ey));
-            }
 
+                // Kiểm tra khoảng cách với người chơi
+                int distToPlayer = abs(ex - player.x) + abs(ey - player.y);
+                if (distToPlayer < 4 * TILE_SIZE) {
+                    validPosition = false;
+                    continue;
+                }
+            }
+            enemies.push_back(EnemyTank(ex, ey));
         }
     }
 
