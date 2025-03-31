@@ -13,6 +13,7 @@ class EnemyTank {
 public:
     int x, y;
     int dirX, dirY;
+    int moveCooldown;
     int moveDelay, shootDelay;
     SDL_Rect rect;
     bool active;
@@ -22,60 +23,61 @@ public:
     // Hàm khởi tạo (constructor)
     EnemyTank(int startX, int startY) {
         moveDelay = 15; // Delay for movement
-        shootDelay = 5;  // Delay for shooting
+        shootDelay = 1;  // Delay for shooting
         x = startX;
         y = startY;
         rect = { x, y, TILE_SIZE, TILE_SIZE };
         dirX = 0;
         dirY = 1;
         active = true;
+        moveCooldown = 20;
     }
 
-    void move(const std::vector<Wall>& walls) {
-        if (--moveDelay > 0)
-            return;
-        moveDelay = 15;
+    void move(const std::vector<Wall>& walls, int playerX, int playerY) {
+          if (moveCooldown > 0) {
+            moveCooldown--;
+            return;  // Chưa hết cooldown, không di chuyển
+        }
+        moveCooldown = 15;  // Reset cooldown (chỉnh số này để thay đổi tốc độ)
 
-        int r = rand() % 4;
-        if (r == 0) { // up
-            dirX = 0;
-            dirY = -5;
-        }
-        else if (r == 1) { // down
-            dirX = 0;
-            dirY = 5;
-        }
-        else if (r == 2) { // left
-            dirY = 0;
-            dirX = -5;
-        }
-        else if (r == 3) { // right
-            dirY = 0;
-            dirX = 5;
-        }
+    int bestDx = 0, bestDy = 0;
+    int shortestDistance = abs(x - playerX) + abs(y - playerY);
 
-        int newX = x + dirX;
-        int newY = y + dirY;
-        SDL_Rect newRect = { newX, newY, TILE_SIZE, TILE_SIZE };
+    // Thử 4 hướng: lên, xuống, trái, phải
+    std::vector<std::pair<int, int>> directions = {{0, -5}, {0, 5}, {-5, 0}, {5, 0}};
+    std::shuffle(directions.begin(), directions.end(), std::mt19937(std::random_device()()));
 
+    for (auto [dx, dy] : directions) {
+        int newX = x + dx;
+        int newY = y + dy;
+        SDL_Rect newRect = {newX, newY, TILE_SIZE, TILE_SIZE};
+
+        bool collision = false;
         for (const auto& wall : walls) {
             if (wall.active && SDL_HasIntersection(&newRect, &wall.rect)) {
-                return;  // Va chạm với tường, không di chuyển
+                collision = true;
+                break;
             }
         }
-        if (newX >= TILE_SIZE && newX <= SCREEN_WIDTH - TILE_SIZE * 2 &&
-            newY >= TILE_SIZE && newY <= SCREEN_HEIGHT - TILE_SIZE * 2) {
-            x = newX;
-            y = newY;
-            rect.x = x;
-            rect.y = y;
+
+        int newDistance = abs(newX - playerX) + abs(newY - playerY);
+        if (!collision && newDistance < shortestDistance) {
+            bestDx = dx;
+            bestDy = dy;
+            shortestDistance = newDistance;
         }
     }
+
+    x += bestDx;
+    y += bestDy;
+    rect.x = x;
+    rect.y = y;
+}
 
     void shoot() {
         if (--shootDelay > 0)
             return;
-        shootDelay = 5;
+        shootDelay = 0;
         // Sử dụng đúng tên vector là 'bullets'
         bullets.push_back(Bullet(x + TILE_SIZE / 2 - 5, y + TILE_SIZE / 2 - 5, dirX, dirY));
     }

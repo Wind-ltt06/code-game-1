@@ -19,7 +19,7 @@ public:
     bool running;
     vector<Wall> walls;
     PlayerTank player{(MAP_WIDTH - 1) / 2 * TILE_SIZE, (MAP_HEIGHT - 2) * TILE_SIZE};
-    int enemyNumber = 3;
+    int enemyNumber = 5;
     vector<EnemyTank> enemies;
 
 // create environtment
@@ -105,7 +105,9 @@ public:
         }
 
         for(auto &enemy : enemies){
-            enemy.move(walls);
+                for (auto& enemy : enemies) {
+    enemy.move(walls, player.x, player.y);
+}
             enemy.updateBullets();
             if( rand() % 100 < 2){
                 enemy.shoot();
