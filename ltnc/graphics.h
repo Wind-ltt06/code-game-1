@@ -30,6 +30,13 @@ public:
         running = false;
     }
 
+    // Khởi tạo SDL_Image
+    int imgFlags = IMG_INIT_PNG;
+    if (!(IMG_Init(imgFlags) & imgFlags)) {
+        cerr << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << endl;
+        running = false;
+    }
+
     window = SDL_CreateWindow("Battle City", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 
     if (!window) {
@@ -43,8 +50,13 @@ public:
         running = false;
     }
 
-    generateWalls();
+    // Load texture cho player
+    if (!player.loadTextures(renderer)) {
+        cerr << "Failed to load player textures!" << endl;
+        running = false;
+    }
 
+    generateWalls();
     spawnEnemies();
 }
 
@@ -133,14 +145,14 @@ public:
             running = false;
         }
 
-        for(auto &enemy : enemies){
-            // Truyền thêm player.bullets vào hàm move để tank có thể né đạn
-            enemy.move(walls, player.x, player.y, player.bullets);
-            enemy.updateBullets();
-            if(rand() % 100 < 1){ // Giảm tỉ lệ bắn xuống 1%
-                enemy.shoot();
-            }
-        }
+        for (auto &enemy : enemies) {
+    enemy.move(walls, player.x, player.y, player.bullets);
+    enemy.updateBullets(walls);
+    if (rand() % 100 < 90) {  // Xác suất 1% để bắn
+        enemy.shoot();
+    }
+}
+
         for(auto& enemy : enemies){
             for ( auto& bullet : enemy.bullets){
                 for(auto& wall : walls){
@@ -165,32 +177,37 @@ public:
 
     }
 
-    void spawnEnemies(){
-        enemies.clear();
-        for (int i = 0 ; i < enemyNumber; i++){
-            int ex,ey;
-            bool validPosition = false;
-            while(!validPosition){
-                ex = (rand() % (MAP_WIDTH - 2) + 1) * TILE_SIZE;
-                ey = (rand() % (MAP_HEIGHT - 2) + 1) * TILE_SIZE;
-                validPosition = true;
-                for (const auto& wall : walls){
-                    if(wall.active && wall.x == ex && wall.y == ey){
-                        validPosition = false;
-                        break;
-                    }
-                }
+    void spawnEnemies() {
+    enemies.clear();
+    for (int i = 0; i < enemyNumber; i++) {
+        int ex, ey;
+        bool validPosition = false;
+        while(!validPosition) {
+            ex = (rand() % (MAP_WIDTH - 2) + 1) * TILE_SIZE;
+            ey = (rand() % (MAP_HEIGHT - 2) + 1) * TILE_SIZE;
 
-                // Kiểm tra khoảng cách với người chơi
-                int distToPlayer = abs(ex - player.x) + abs(ey - player.y);
-                if (distToPlayer < 4 * TILE_SIZE) {
+            // Kiểm tra xem vị trí có phù hợp với kích thước tank mới không
+            validPosition = true;
+            SDL_Rect tempRect = {ex, ey, 30, 30};
+
+            for (const auto& wall : walls) {
+                if(wall.active && SDL_HasIntersection(&tempRect, &wall.rect)) {
                     validPosition = false;
-                    continue;
+                    break;
                 }
             }
-            enemies.push_back(EnemyTank(ex, ey));
+
+            // Kiểm tra khoảng cách với player
+            int distToPlayer = abs(ex - player.x) + abs(ey - player.y);
+            if (distToPlayer < 4 * TILE_SIZE) {
+                validPosition = false;
+            }
         }
+     enemies.push_back(EnemyTank(ex, ey, renderer));
+
     }
+}
+
 
 
 
@@ -225,10 +242,11 @@ public:
             SDL_Delay(16);
         }
     }
-    ~Game(){
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
+    ~Game() {
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    IMG_Quit();  // Giải phóng SDL_Image
+    SDL_Quit();
 
     }
 

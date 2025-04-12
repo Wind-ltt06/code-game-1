@@ -16,21 +16,40 @@ public:
     int moveCooldown;
     int moveDelay, shootDelay;
     SDL_Rect rect;
+    SDL_Texture* texture;  // Thêm texture cho enemy tank
+
     bool active;
     std::vector<Bullet> bullets;
 
     // Hàm khởi tạo (constructor)
-    EnemyTank(int startX, int startY) {
-        moveDelay = 15; // Delay for movement
-        shootDelay = 2;  // Delay for shooting
-        x = startX;
-        y = startY;
-        rect = { x, y, TILE_SIZE, TILE_SIZE };
-        dirX = 0;
-        dirY = 1;
-        active = true;
-        moveCooldown = 15;
+   EnemyTank(int startX, int startY, SDL_Renderer* renderer) {
+    x = startX;
+    y = startY;
+    rect = { x, y, 30, 30 };
+    dirX = 0;
+    dirY = 1;
+    active = true;
+    moveCooldown = 15;
+    shootDelay = 30;
+
+    // Load texture cho enemy
+    texture = loadTexture(renderer, "player/enemytank.jpg");  // Đường dẫn ảnh enemy
+    if (!texture) {
+        SDL_Log("❌ Lỗi khi load texture enemy!\n");
     }
+}
+    SDL_Texture* loadTexture(SDL_Renderer* renderer, const std::string& path) {
+    SDL_Surface* surface = IMG_Load(path.c_str());
+    if (!surface) {
+        SDL_Log("❌ Không thể load ảnh %s! Lỗi: %s\n", path.c_str(), IMG_GetError());
+        return nullptr;
+    }
+    SDL_Texture* tex = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+    return tex;
+}
+
+
 
     // Kiểm tra xem có đạn nào gần không
    bool isDangerNearby(const std::vector<Bullet>& playerBullets) {
@@ -217,34 +236,47 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
             }
         }
     }
+
 }
 
-    void shoot() {
-        if (shootDelay > 0) {
-            shootDelay--;
-            return;
-        }
-        shootDelay = 30; // Thời gian chờ giữa các lần bắn
-        bullets.push_back(Bullet(x + TILE_SIZE / 2 - 5, y + TILE_SIZE / 2 - 5, dirX, dirY));
+   void shoot() {
+    if (shootDelay > 0) {
+        shootDelay--;
+        return;
+    }
+    shootDelay = 30;
+
+    if (dirX == 0 && dirY == 0) {
+        SDL_Log("⚠️ EnemyTank không có hướng bắn!");
+    } else {
+        SDL_Log("🚀 EnemyTank bắn đạn! Hướng: (%d, %d)", dirX, dirY);
     }
 
-    void updateBullets() {
-        std::vector<Wall> walls;
-        for (auto &bullet : bullets) {
-            bullet.move(walls);
-        }
-        bullets.erase(std::remove_if(bullets.begin(), bullets.end(), [](Bullet &b) {
-            return !b.active;
-        }), bullets.end());
+    bullets.push_back(Bullet(x + 15, y + 15, dirX, dirY, 10));
+    SDL_Log("🔴 Số lượng đạn: %lu", bullets.size());
+}
+
+
+    void updateBullets(const std::vector<Wall>& walls) {
+    for (auto &bullet : bullets) {
+        bullet.move(walls);
     }
+    bullets.erase(std::remove_if(bullets.begin(), bullets.end(), [](Bullet &b) {
+        return !b.active;
+    }), bullets.end());
+}
+
+
 
     void render(SDL_Renderer* renderer) {
+    if (texture) {
+        SDL_RenderCopy(renderer, texture, NULL, &rect);
+    } else {
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        SDL_RenderFillRect(renderer, &rect);
-        for (auto &bullet : bullets) {
-            bullet.render(renderer);
-        }
+        SDL_RenderFillRect(renderer, &rect);  // Nếu không có ảnh, vẽ hình chữ nhật đỏ
     }
+}
+
 };
 
 #endif // ENEMYTANK_H
