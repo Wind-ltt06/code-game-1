@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1742912948 source:c:\git\code-game-1\ltnc\main.cpp
+1744529428 source:c:\git\code-game-1\ltnc\main.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -7,12 +7,13 @@
 	"defs.h"
 	<bits/stdc++.h>
 
-1744523014 c:\git\code-game-1\ltnc\graphics.h
+1744530736 c:\git\code-game-1\ltnc\graphics.h
 	<SDL.h>
 	<SDL_image.h>
 	"defs.h"
 	<iostream>
-	<bits/stdc++.h>
+	<vector>
+	<algorithm>
 	"Wall.h"
 	"Player.h"
 	"enemytank.h"
@@ -23,7 +24,7 @@
 	<SDL.h>
 	"defs.h"
 
-1744521500 c:\git\code-game-1\ltnc\player.h
+1744531667 c:\git\code-game-1\ltnc\player.h
 	<SDL.h>
 	<SDL_image.h>
 	"defs.h"
@@ -33,14 +34,13 @@
 	<cmath>
 	<string>
 
-1744521385 c:\git\code-game-1\ltnc\bullet.h
+1744529231 c:\git\code-game-1\ltnc\bullet.h
 	<SDL.h>
 	"defs.h"
 	"Wall.h"
 	<vector>
-	"Bullet.h"
 
-1744523010 c:\git\code-game-1\ltnc\enemytank.h
+1744531978 c:\git\code-game-1\ltnc\enemytank.h
 	<SDL.h>
 	"defs.h"
 	"Wall.h"

@@ -54,10 +54,10 @@ public:
         if (rightTexture) SDL_DestroyTexture(rightTexture);
 
         // Load các texture cho 4 hướng
-        upTexture = loadTexture(renderer, "player/tank.jpg");
-        downTexture = loadTexture(renderer, "player/tank.jpg");
-        leftTexture = loadTexture(renderer, "player/tank.jpg");
-        rightTexture = loadTexture(renderer, "player/tank.jpg");
+        upTexture = loadTexture(renderer, "player/enermytankup.jpg");
+        downTexture = loadTexture(renderer, "player/enermytankdown.jpg");
+        leftTexture = loadTexture(renderer, "player/enermytankleft.jpg");
+        rightTexture = loadTexture(renderer, "player/enermytankright.jpg");
 
         // Mặc định tank hướng lên
         texture = upTexture;

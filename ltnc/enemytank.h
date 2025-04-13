@@ -255,15 +255,25 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
 
 }
             void updateTextureBasedOnDirection() {
+    SDL_Texture* newTexture = texture;
+
     if (dirX == 0 && dirY < 0) {
-        texture = upTexture;     // Hướng lên
+        newTexture = upTexture;
     } else if (dirX == 0 && dirY > 0) {
-        texture = downTexture;   // Hướng xuống
+        newTexture = downTexture;
     } else if (dirX < 0 && dirY == 0) {
-        texture = leftTexture;   // Hướng trái
+        newTexture = leftTexture;
     } else if (dirX > 0 && dirY == 0) {
-        texture = rightTexture;  // Hướng phải
+        newTexture = rightTexture;
     }
+
+    // Chỉ đổi nếu khác với texture hiện tại
+    if (newTexture != texture) {
+        texture = newTexture;
+        // SDL_Log("⚡ Đổi texture enemy tank theo hướng (%d, %d)", dirX, dirY);
+    }
+}
+
 
    void shoot() {
     if (shootDelay > 0) {
@@ -272,11 +282,6 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
     }
     shootDelay = 30;
 
-    if (dirX == 0 && dirY == 0) {
-        SDL_Log("⚠️ EnemyTank không có hướng bắn!");
-    } else {
-        SDL_Log("🚀 EnemyTank bắn đạn! Hướng: (%d, %d)", dirX, dirY);
-    }
 
     bullets.push_back(Bullet(x + 15, y + 15, dirX, dirY, 10));
 
@@ -307,12 +312,7 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
         bullet.render(renderer);
     }
 }
-~EnemyTank() {
-    if (upTexture) SDL_DestroyTexture(upTexture);
-    if (downTexture) SDL_DestroyTexture(downTexture);
-    if (leftTexture) SDL_DestroyTexture(leftTexture);
-    if (rightTexture) SDL_DestroyTexture(rightTexture);
-}
+
 
 };
 

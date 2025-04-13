@@ -5,7 +5,8 @@
 #include <SDL_image.h>
 #include "defs.h"
 #include <iostream>
-#include <bits/stdc++.h>
+#include <vector>
+#include <algorithm>
 #include "Wall.h"
 #include "Player.h"
 #include "enemytank.h"
@@ -17,10 +18,10 @@ public:
     SDL_Window* window;
     SDL_Renderer* renderer;
     bool running;
-    std::vector<Wall> walls;
+    vector<Wall> walls;
     PlayerTank player{(MAP_WIDTH - 1) / 2 * TILE_SIZE, (MAP_HEIGHT - 2) * TILE_SIZE};
-    int enemyNumber = 5;
-    std::vector<EnemyTank> enemies;
+    int enemyNumber = 7;
+    vector<EnemyTank> enemies;
 
 // create environtment
   Game()
