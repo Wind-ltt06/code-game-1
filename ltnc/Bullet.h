@@ -29,8 +29,8 @@ public:
     }
 
   void move(const std::vector<Wall>& walls) {
-    x += dx;
-    y += dy;
+     x += dx * (speed * 0.5);
+    y += dy * (speed * 0.5);
     rect.x = x;
     rect.y = y;
 

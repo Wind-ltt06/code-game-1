@@ -25,7 +25,7 @@ public:
 
     std::vector<Bullet> bullets;
     const int maxBullets = 5;
-    const Uint32 reloadTime = 15000;
+    const Uint32 reloadTime = 30000;
     Uint32 lastShotTime = 0;
     int speed;
     bool keyPressed;
@@ -138,7 +138,7 @@ public:
     }
 
     // Điều chỉnh vị trí bắn cho phù hợp với tank 30x30
-    bullets.push_back(Bullet(x + TANK_WIDTH/2 - 5, y + TANK_HEIGHT/2 - 5, dirX, dirY, 10));
+    bullets.push_back(Bullet(x + TANK_WIDTH/2 - 5, y + TANK_HEIGHT/2 - 5, dirX, dirY, 3));
     lastShotTime = currentTime;
 }
 

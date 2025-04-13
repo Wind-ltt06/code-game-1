@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <cstdlib>
 
+
 class EnemyTank {
 public:
     int x, y;
@@ -17,6 +18,11 @@ public:
     int moveDelay, shootDelay;
     SDL_Rect rect;
     SDL_Texture* texture;  // Thêm texture cho enemy tank
+
+    SDL_Texture* upTexture;
+    SDL_Texture* downTexture;
+    SDL_Texture* leftTexture;
+    SDL_Texture* rightTexture;
 
     bool active;
     std::vector<Bullet> bullets;
@@ -33,9 +39,17 @@ public:
     shootDelay = 30;
 
     // Load texture cho enemy
-    texture = loadTexture(renderer, "player/enemytank.jpg");  // Đường dẫn ảnh enemy
-    if (!texture) {
-        SDL_Log("❌ Lỗi khi load texture enemy!\n");
+    upTexture = loadTexture(renderer, "player/enermytankup.jpg");
+    downTexture = loadTexture(renderer, "player/enermytankdown.jpg");
+    leftTexture = loadTexture(renderer, "player/enermytankleft.jpg");
+    rightTexture = loadTexture(renderer, "player/enermytankright.jpg");
+
+    // Mặc định là hướng xuống
+    texture = downTexture;
+
+    // Kiểm tra nếu không thể load được texture
+    if (!upTexture || !downTexture || !leftTexture || !rightTexture) {
+        SDL_Log("❌ Lỗi khi load texture enemy tank!");
     }
 }
     SDL_Texture* loadTexture(SDL_Renderer* renderer, const std::string& path) {
@@ -89,6 +103,8 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
         return;  // Chưa hết cooldown, không di chuyển
     }
     moveCooldown = 15;  // Reset cooldown
+
+     updateTextureBasedOnDirection();
 
     // Kiểm tra xem có đạn gần không
     bool isDanger = isDangerNearby(playerBullets);
@@ -238,6 +254,16 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
     }
 
 }
+            void updateTextureBasedOnDirection() {
+    if (dirX == 0 && dirY < 0) {
+        texture = upTexture;     // Hướng lên
+    } else if (dirX == 0 && dirY > 0) {
+        texture = downTexture;   // Hướng xuống
+    } else if (dirX < 0 && dirY == 0) {
+        texture = leftTexture;   // Hướng trái
+    } else if (dirX > 0 && dirY == 0) {
+        texture = rightTexture;  // Hướng phải
+    }
 
    void shoot() {
     if (shootDelay > 0) {
@@ -253,7 +279,7 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
     }
 
     bullets.push_back(Bullet(x + 15, y + 15, dirX, dirY, 10));
-    SDL_Log("🔴 Số lượng đạn: %lu", bullets.size());
+
 }
 
 
@@ -268,13 +294,24 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
 
 
 
-    void render(SDL_Renderer* renderer) {
+   void render(SDL_Renderer* renderer) {
     if (texture) {
         SDL_RenderCopy(renderer, texture, NULL, &rect);
     } else {
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        SDL_RenderFillRect(renderer, &rect);  // Nếu không có ảnh, vẽ hình chữ nhật đỏ
+        SDL_RenderFillRect(renderer, &rect);
     }
+
+    // Thêm vào để vẽ đạn
+    for (auto &bullet : bullets) {
+        bullet.render(renderer);
+    }
+}
+~EnemyTank() {
+    if (upTexture) SDL_DestroyTexture(upTexture);
+    if (downTexture) SDL_DestroyTexture(downTexture);
+    if (leftTexture) SDL_DestroyTexture(leftTexture);
+    if (rightTexture) SDL_DestroyTexture(rightTexture);
 }
 
 };

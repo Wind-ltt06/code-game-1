@@ -9,6 +9,7 @@
 #include "Wall.h"
 #include "Player.h"
 #include "enemytank.h"
+
 using namespace std;
 
 class Game{
@@ -16,10 +17,10 @@ public:
     SDL_Window* window;
     SDL_Renderer* renderer;
     bool running;
-    vector<Wall> walls;
+    std::vector<Wall> walls;
     PlayerTank player{(MAP_WIDTH - 1) / 2 * TILE_SIZE, (MAP_HEIGHT - 2) * TILE_SIZE};
     int enemyNumber = 5;
-    vector<EnemyTank> enemies;
+    std::vector<EnemyTank> enemies;
 
 // create environtment
   Game()
