@@ -24,7 +24,7 @@
 	<SDL.h>
 	"defs.h"
 
-1744531667 c:\git\code-game-1\ltnc\player.h
+1744627769 c:\git\code-game-1\ltnc\player.h
 	<SDL.h>
 	<SDL_image.h>
 	"defs.h"
@@ -34,13 +34,13 @@
 	<cmath>
 	<string>
 
-1744529231 c:\git\code-game-1\ltnc\bullet.h
+1744626971 c:\git\code-game-1\ltnc\bullet.h
 	<SDL.h>
 	"defs.h"
 	"Wall.h"
 	<vector>
 
-1744531978 c:\git\code-game-1\ltnc\enemytank.h
+1744627285 c:\git\code-game-1\ltnc\enemytank.h
 	<SDL.h>
 	"defs.h"
 	"Wall.h"

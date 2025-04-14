@@ -23,7 +23,7 @@ public:
     SDL_Texture* downTexture;
     SDL_Texture* leftTexture;
     SDL_Texture* rightTexture;
-
+    SDL_Texture* bulletTexture;
     bool active;
     std::vector<Bullet> bullets;
 
@@ -43,6 +43,7 @@ public:
     downTexture = loadTexture(renderer, "player/enermytankdown.jpg");
     leftTexture = loadTexture(renderer, "player/enermytankleft.jpg");
     rightTexture = loadTexture(renderer, "player/enermytankright.jpg");
+    bulletTexture = loadTexture(renderer, "player/bullet.png");
 
     // Mặc định là hướng xuống
     texture = downTexture;

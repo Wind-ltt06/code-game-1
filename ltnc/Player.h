@@ -19,13 +19,14 @@ public:
     SDL_Texture* downTexture;  // Texture cho hướng xuống
     SDL_Texture* leftTexture;  // Texture cho hướng trái
     SDL_Texture* rightTexture; // Texture cho hướng phải
+    SDL_Texture* bulletTexture;
     const int TANK_WIDTH = 30;  // Thêm constant mới
     const int TANK_HEIGHT = 30;
 
 
     std::vector<Bullet> bullets;
     const int maxBullets = 5;
-    const Uint32 reloadTime = 30000;
+    const Uint32 reloadTime = 15000;
     Uint32 lastShotTime = 0;
     int speed;
     bool keyPressed;
@@ -53,11 +54,13 @@ public:
         if (leftTexture) SDL_DestroyTexture(leftTexture);
         if (rightTexture) SDL_DestroyTexture(rightTexture);
 
+
         // Load các texture cho 4 hướng
         upTexture = loadTexture(renderer, "player/tankup.jpg");
         downTexture = loadTexture(renderer, "player/tankdown.jpg");
         leftTexture = loadTexture(renderer, "player/tankleft.jpg");
         rightTexture = loadTexture(renderer, "player/tankright.jpg");
+         bulletTexture = loadTexture(renderer, "player/bullet.png");
 
         // Mặc định tank hướng lên
         texture = upTexture;
@@ -173,6 +176,7 @@ public:
         if (downTexture) SDL_DestroyTexture(downTexture);
         if (leftTexture) SDL_DestroyTexture(leftTexture);
         if (rightTexture) SDL_DestroyTexture(rightTexture);
+
     }
 };
 #endif // Player_h

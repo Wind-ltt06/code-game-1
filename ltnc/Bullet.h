@@ -17,6 +17,7 @@ public:
     int speed; // Thêm biến tốc độ
     SDL_Rect rect;
     bool active;
+    SDL_Texture* texture;
 
     Bullet(int startX, int startY, int dirX, int dirY, int bulletSpeed = 10) {
         x = startX;
@@ -50,11 +51,34 @@ public:
 }
 
 
-    void render(SDL_Renderer* renderer) {
+   void render(SDL_Renderer* renderer) {
         if (active) {
-            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-            SDL_RenderFillRect(renderer, &rect);
+            if (texture) {
+                // Render với texture
+                SDL_RenderCopy(renderer, texture, NULL, &rect);
+            } else {
+                // Sử dụng hình chữ nhật đơn giản nếu không có texture
+                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+                SDL_RenderFillRect(renderer, &rect);
+            }
         }
     }
+
 };
+   inline SDL_Texture* loadBulletTexture(SDL_Renderer* renderer, const std::string& path) {
+    SDL_Surface* surface = IMG_Load(path.c_str());
+    if (!surface) {
+        SDL_Log("Cannot load bullet image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
+        return nullptr;
+    }
+
+    SDL_Texture* tex = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+
+    if (!tex) {
+        SDL_Log("Cannot create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+    }
+
+    return tex;
+}
 #endif
