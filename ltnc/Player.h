@@ -133,15 +133,15 @@ public:
           rect = {x, y, TANK_WIDTH, TANK_HEIGHT};
     }
 
-  void shoot() {
+ void shoot() {
     Uint32 currentTime = SDL_GetTicks();
     if (bullets.size() >= maxBullets) {
         if (currentTime - lastShotTime < reloadTime) return;
         bullets.clear();
     }
 
-    // Điều chỉnh vị trí bắn cho phù hợp với tank 30x30
-    bullets.push_back(Bullet(x + TANK_WIDTH/2 - 5, y + TANK_HEIGHT/2 - 5, dirX, dirY, 3));
+    // Truyền bulletTexture khi tạo đạn
+    bullets.push_back(Bullet(x + TANK_WIDTH/2 - 5, y + TANK_HEIGHT/2 - 5, dirX, dirY, 3, bulletTexture));
     lastShotTime = currentTime;
 }
 

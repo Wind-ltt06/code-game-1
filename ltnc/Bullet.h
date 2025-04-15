@@ -19,15 +19,16 @@ public:
     bool active;
     SDL_Texture* texture;
 
-    Bullet(int startX, int startY, int dirX, int dirY, int bulletSpeed = 10) {
-        x = startX;
-        y = startY;
-        dx = dirX;
-        dy = dirY;
-        speed = bulletSpeed; // Lưu tốc độ vào biến
-        active = true;
-        rect = {x, y, 10, 10}; // Kích thước viên đạn
-    }
+ Bullet(int startX, int startY, int dirX, int dirY, int bulletSpeed = 10, SDL_Texture* bulletTexture = nullptr) {
+    x = startX;
+    y = startY;
+    dx = dirX;
+    dy = dirY;
+    speed = bulletSpeed;
+    active = true;
+    rect = {x, y, 10, 10};
+    texture = bulletTexture; // Đặt texture
+}
 
   void move(const std::vector<Wall>& walls) {
      x += dx * (speed * 0.5);

@@ -276,18 +276,16 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
 }
 
 
-   void shoot() {
+void shoot() {
     if (shootDelay > 0) {
         shootDelay--;
         return;
     }
     shootDelay = 30;
 
-
-    bullets.push_back(Bullet(x + 15, y + 15, dirX, dirY, 10));
-
+    // Truyền bulletTexture khi tạo đạn
+    bullets.push_back(Bullet(x + 15, y + 15, dirX, dirY, 10, bulletTexture));
 }
-
 
     void updateBullets(const std::vector<Wall>& walls) {
     for (auto &bullet : bullets) {
