@@ -7,7 +7,7 @@
 	"defs.h"
 	<bits/stdc++.h>
 
-1744530736 c:\git\code-game-1\ltnc\graphics.h
+1745250635 c:\git\code-game-1\ltnc\graphics.h
 	<SDL.h>
 	<SDL_image.h>
 	"defs.h"
@@ -17,12 +17,15 @@
 	"Wall.h"
 	"Player.h"
 	"enemytank.h"
+	"Menu.h"
 
-1742879782 c:\git\code-game-1\ltnc\defs.h
+1745250635 c:\git\code-game-1\ltnc\defs.h
 
-1743059697 c:\git\code-game-1\ltnc\wall.h
+1745243088 c:\git\code-game-1\ltnc\wall.h
 	<SDL.h>
+	<SDL_image.h>
 	"defs.h"
+	<string>
 
 1744729513 c:\git\code-game-1\ltnc\player.h
 	<SDL.h>
@@ -48,4 +51,18 @@
 	"Bullet.h"
 	<algorithm>
 	<cstdlib>
+
+1745249162 c:\git\code-game-1\ltnc\menu.h
+	<SDL.h>
+	<SDL_image.h>
+	<string>
+	<vector>
+	"defs.h"
+	<SDL_ttf.h>
+	<bits/stdc++.h>
+
+1745250909 source:c:\git\code-game-1\ltnc\menu.cpp
+	"Menu.h"
+	<SDL_ttf.h>
+	<iostream>
 
