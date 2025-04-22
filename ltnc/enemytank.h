@@ -45,18 +45,16 @@ public:
     rightTexture = loadTexture(renderer, "player/enermytankright.jpg");
     bulletTexture = loadTexture(renderer, "player/bullet.png");
 
-    // Mặc định là hướng xuống
     texture = downTexture;
 
-    // Kiểm tra nếu không thể load được texture
     if (!upTexture || !downTexture || !leftTexture || !rightTexture) {
-        SDL_Log("❌ Lỗi khi load texture enemy tank!");
+        SDL_Log("❌ NO");
     }
 }
     SDL_Texture* loadTexture(SDL_Renderer* renderer, const std::string& path) {
     SDL_Surface* surface = IMG_Load(path.c_str());
     if (!surface) {
-        SDL_Log("❌ Không thể load ảnh %s! Lỗi: %s\n", path.c_str(), IMG_GetError());
+        SDL_Log("❌ NO", path.c_str(), IMG_GetError());
         return nullptr;
     }
     SDL_Texture* tex = SDL_CreateTextureFromSurface(renderer, surface);
@@ -66,7 +64,6 @@ public:
 
 
 
-    // Kiểm tra xem có đạn nào gần không
    bool isDangerNearby(const std::vector<Bullet>& playerBullets) {
     for (const auto& bullet : playerBullets) {
         if (!bullet.active) continue;

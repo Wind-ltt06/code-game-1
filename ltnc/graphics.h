@@ -227,7 +227,7 @@ void generateWalls(){
            if (state != PLAYING) return;
 
     player.updateBullets(walls);
-
+        // va chạm giữa đạn và tường
         for(auto& bullet : player.bullets){
             for ( auto& wall : walls){
                 if( wall.active && SDL_HasIntersection(&bullet.rect, &wall.rect)){
@@ -237,6 +237,7 @@ void generateWalls(){
                 }
             }
         }
+        // va chạm giữa đạn và enermy
         for ( auto &bullet : player.bullets){
             for(auto& enemy : enemies){
                 if(enemy.active && SDL_HasIntersection(&bullet.rect, &enemy.rect)){
@@ -255,7 +256,7 @@ void generateWalls(){
         if(enemies.empty()){
             running = false;
         }
-
+        // tỉ lệ bắn dạn của enermy tank
         for (auto &enemy : enemies) {
     enemy.move(walls, player.x, player.y, player.bullets);
     enemy.updateBullets(walls);
@@ -275,7 +276,7 @@ void generateWalls(){
                 }
             }
         }
-
+   // va chạm giữa đạn enermy và người chơi
         for( auto &enemy : enemies){
             for(auto& bullet : enemy.bullets){
                 //update
