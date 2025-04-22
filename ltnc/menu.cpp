@@ -1,4 +1,3 @@
-
 #include "Menu.h"
 #include <SDL_ttf.h>
 #include <iostream>

@@ -11,6 +11,8 @@
 #include "Player.h"
 #include "enemytank.h"
 #include "Menu.h"
+#include <SDL_mixer.h>
+
 
 using namespace std;
 
@@ -24,6 +26,12 @@ public:
     int enemyNumber = 7;
     vector<EnemyTank> enemies;
     SDL_Texture* mapTexture;
+    TTF_Font* font;
+    SDL_Texture* scoreTexture;
+    SDL_Rect scoreRect;
+    Mix_Music* backgroundMusic = nullptr;
+
+    int score = 0;
 
     enum GameState {
         MENU,
@@ -55,6 +63,32 @@ public:
         cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << endl;
         running = false;
     }
+    if (TTF_Init() < 0) {
+    cerr << "SDL_ttf không thể khởi tạo! SDL_ttf Error: " << TTF_GetError() << endl;
+    running = false;
+}
+
+    font = TTF_OpenFont("font/arial.ttf", 24);
+        if (!font) {
+    cerr << "Không thể load font score! SDL_ttf Error: " << TTF_GetError() << endl;
+    running = false;
+        }
+
+    scoreTexture = nullptr;
+    // hàm nhạc
+
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+    cerr << "SDL_mixer không thể khởi tạo! Lỗi: " << Mix_GetError() << endl;
+    running = false;
+    }
+
+    // Load nhạc nền
+    backgroundMusic = Mix_LoadMUS("music/music.mp3");
+    if (!backgroundMusic) {
+    cerr << "❌ Không thể load nhạc nền! Lỗi: " << Mix_GetError() << endl;
+    } else {
+    Mix_PlayMusic(backgroundMusic, -1); // Lặp vô hạn
+}
 
     // Khởi tạo SDL_Image
     int imgFlags = IMG_INIT_PNG;
@@ -95,6 +129,7 @@ public:
 
     generateWalls();
     spawnEnemies();
+        updateScoreTexture();
 }
 void generateWalls(){
     for (int i = 3; i < MAP_HEIGHT - 3; i += 2){
@@ -207,7 +242,11 @@ void generateWalls(){
                 if(enemy.active && SDL_HasIntersection(&bullet.rect, &enemy.rect)){
                     enemy.active = false;
                     bullet.active = false;
+                    score += 100;
+                    updateScoreTexture(); // Cập nhật text sau khi cộng điểm
+
                 }
+
             }
         }
 
@@ -251,6 +290,30 @@ void generateWalls(){
         }
     }
 
+    void updateScoreTexture() {
+    if (scoreTexture) SDL_DestroyTexture(scoreTexture);
+
+    SDL_Color textColor = {255, 255, 255, 255};
+    std::string scoreText = "Score: " + std::to_string(score);
+
+    SDL_Surface* surface = TTF_RenderText_Solid(font, scoreText.c_str(), textColor);
+    if (!surface) {
+        SDL_Log("Không thể tạo surface score! %s", TTF_GetError());
+        return;
+    }
+
+    scoreTexture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+
+    if (!scoreTexture) {
+        SDL_Log("Không thể tạo texture score! %s", SDL_GetError());
+        return;
+    }
+
+    scoreRect = {10, 10, surface->w, surface->h}; // Góc trái trên
+}
+
+
     void spawnEnemies() {
     enemies.clear();
     for (int i = 0; i < enemyNumber; i++) {
@@ -291,7 +354,9 @@ void generateWalls(){
             // Phần render game hiện tại của bạn...
             SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255);
             SDL_RenderClear(renderer);
-
+            if (scoreTexture) {
+            SDL_RenderCopy(renderer, scoreTexture, NULL, &scoreRect);
+            }
             // Vẽ map
             if (mapTexture) {
                 SDL_Rect mapRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
@@ -342,6 +407,11 @@ void generateWalls(){
     SDL_DestroyWindow(window);
     IMG_Quit();  // Giải phóng SDL_Image
     SDL_Quit();
+    if (scoreTexture) SDL_DestroyTexture(scoreTexture);
+    if (font) TTF_CloseFont(font);
+    TTF_Quit();
+    if (backgroundMusic) Mix_FreeMusic(backgroundMusic);
+    Mix_CloseAudio();
 
     }
 
