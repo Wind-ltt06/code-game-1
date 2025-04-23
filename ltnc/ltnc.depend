@@ -7,7 +7,7 @@
 	"defs.h"
 	<bits/stdc++.h>
 
-1745338980 c:\git\code-game-1\ltnc\graphics.h
+1745371547 c:\git\code-game-1\ltnc\graphics.h
 	<SDL.h>
 	<SDL_image.h>
 	"defs.h"
@@ -22,13 +22,13 @@
 
 1745250635 c:\git\code-game-1\ltnc\defs.h
 
-1745293823 c:\git\code-game-1\ltnc\wall.h
+1745371547 c:\git\code-game-1\ltnc\wall.h
 	<SDL.h>
 	<SDL_image.h>
 	"defs.h"
 	<string>
 
-1744729513 c:\git\code-game-1\ltnc\player.h
+1745371547 c:\git\code-game-1\ltnc\player.h
 	<SDL.h>
 	<SDL_image.h>
 	"defs.h"
@@ -38,7 +38,7 @@
 	<cmath>
 	<string>
 
-1744729552 c:\git\code-game-1\ltnc\bullet.h
+1745371547 c:\git\code-game-1\ltnc\bullet.h
 	<SDL.h>
 	"defs.h"
 	"Wall.h"

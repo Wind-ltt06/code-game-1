@@ -14,7 +14,7 @@ class Bullet {
 public:
     int x, y;
     int dx, dy;
-    int speed; // Thêm biến tốc độ
+    int speed;
     SDL_Rect rect;
     bool active;
     SDL_Texture* texture;
@@ -27,7 +27,7 @@ public:
     speed = bulletSpeed;
     active = true;
     rect = {x, y, 10, 10};
-    texture = bulletTexture; // Đặt texture
+    texture = bulletTexture;
 }
 
   void move(const std::vector<Wall>& walls) {

@@ -20,7 +20,7 @@ public:
     SDL_Texture* leftTexture;  // Texture cho hướng trái
     SDL_Texture* rightTexture; // Texture cho hướng phải
     SDL_Texture* bulletTexture;
-    const int TANK_WIDTH = 30;  // Thêm constant mới
+    const int TANK_WIDTH = 30;
     const int TANK_HEIGHT = 30;
 
 
@@ -48,7 +48,7 @@ public:
 
     // Hàm để load các texture cho tank
     bool loadTextures(SDL_Renderer* renderer) {
-        // Giải phóng texture cũ nếu có
+
         if (upTexture) SDL_DestroyTexture(upTexture);
         if (downTexture) SDL_DestroyTexture(downTexture);
         if (leftTexture) SDL_DestroyTexture(leftTexture);
@@ -100,7 +100,7 @@ public:
             else if (dirX == 1 && dirY == 0) texture = rightTexture;
         }
 
-        // Tính toán vị trí mới
+
         int newX = x + dx * speed;
         int newY = y + dy * speed;
 

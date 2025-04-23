@@ -1,7 +1,7 @@
 Họ và tên : Lê Trọng Thức
 Mã sinh viên : 24021637
 Giới thiệu game: Trong một thành phố bị tàn phá bởi chiến tranh, bạn là hi vọng cuối cùng chống lại làn sóng xe tăng địch không ngừng tiến đến.Hãy điều khiển chiếc xe tăng của mình, phá hủy kẻ thù, bảo vệ căn cứ và trở thành huyền thoại chiến trường!"
-Điểm số mong muốn : 8
+Ngưỡng điểm: 8
 Tự làm những phần nào, phần nào lấy từ các kiểu tutorial/code mẫu
     Những phần đã làm:
     + main.ccp

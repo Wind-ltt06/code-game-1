@@ -139,8 +139,7 @@ void generateWalls(){
         }
     }
 }
-
-     // Sửa đổi phương thức handleEvents
+// hàm di chuyển
     void handleEvents() {
         if (state == MENU) {
             Menu::MenuResult result = menu->handleEvents();
@@ -152,7 +151,6 @@ void generateWalls(){
                     running = false;
                     break;
                 case Menu::SETTINGS:
-                    // Xử lý settings (có thể mở một menu settings khác)
                     break;
                 default:
                     break;
@@ -160,13 +158,11 @@ void generateWalls(){
         } else if (state == PLAYING) {
             SDL_Event event;
 
-            // Biến để theo dõi phím đang được nhấn
             int dx = 0, dy = 0;
 
             // Lấy trạng thái của tất cả các phím
             const Uint8* keystate = SDL_GetKeyboardState(NULL);
 
-            // Kiểm tra các phím mũi tên và cập nhật dx, dy
             if (keystate[SDL_SCANCODE_UP]) {
                 dy = -1;
                 dx = 0;
@@ -281,7 +277,7 @@ void generateWalls(){
             for(auto& bullet : enemy.bullets){
                 //update
                 if(SDL_HasIntersection(&bullet.rect, &player.rect)){
-                    running = false;
+                    state = MENU;
                     return;
                 }
             }
@@ -314,7 +310,7 @@ void generateWalls(){
     scoreRect = {10, 10, surface->w, surface->h}; // Góc trái trên
 }
 
-
+// hàm sinh kẻ thù
     void spawnEnemies() {
     enemies.clear();
     for (int i = 0; i < enemyNumber; i++) {
@@ -385,12 +381,8 @@ void generateWalls(){
 
             SDL_RenderPresent(renderer);
         } else if (state == GAME_OVER) {
-            // Vẽ màn hình game over
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
             SDL_RenderClear(renderer);
-
-            // Ở đây bạn có thể vẽ thêm text game over, điểm số...
-
             SDL_RenderPresent(renderer);
         }
     }
@@ -406,7 +398,7 @@ void generateWalls(){
     ~Game() {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    IMG_Quit();  // Giải phóng SDL_Image
+    IMG_Quit();
     SDL_Quit();
     if (scoreTexture) SDL_DestroyTexture(scoreTexture);
     if (font) TTF_CloseFont(font);

@@ -2,7 +2,7 @@
 #define WALL_H
 
 #include <SDL.h>
-#include <SDL_image.h>  // Thêm để load ảnh
+#include <SDL_image.h>
 #include "defs.h"
 #include <string>
 
@@ -19,7 +19,7 @@ public:
         active = true;
         rect = {x, y, TILE_SIZE, TILE_SIZE};
 
-        // Load texture ở đây
+
         texture = loadTexture(renderer, "player/wall.jpg");
 
         if (!texture) {
