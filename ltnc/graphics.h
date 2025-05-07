@@ -87,7 +87,7 @@ public:
     if (!backgroundMusic) {
     cerr << "❌ Không thể load nhạc nền! Lỗi: " << Mix_GetError() << endl;
     } else {
-    Mix_PlayMusic(backgroundMusic, -1); // Lặp vô hạn
+    Mix_PlayMusic(backgroundMusic, -1);
 }
 
     // Khởi tạo SDL_Image
@@ -121,7 +121,7 @@ public:
         cerr << "Failed to load player textures!" << endl;
         running = false;
     }
-          // Tải texture cho map ở đây
+          // Tải texture cho map
         mapTexture = loadTexture("player/map.jpg");
         if (!mapTexture) {
             SDL_Log("❌ Không thể load ảnh nền map!");
@@ -131,6 +131,7 @@ public:
     spawnEnemies();
         updateScoreTexture();
 }
+// setting 3 phan de vua kho
 void generateWalls(){
     for (int i = 3; i < MAP_HEIGHT - 3; i += 2){
         for (int j = 3; j < MAP_WIDTH - 3; j += 2){
@@ -348,7 +349,7 @@ void generateWalls(){
         if (state == MENU) {
             menu->render();
         } else if (state == PLAYING) {
-            // Phần render game hiện tại của bạn...
+
             SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255);
             SDL_RenderClear(renderer);
             if (scoreTexture) {
