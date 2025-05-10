@@ -36,7 +36,7 @@ Menu::~Menu() {
 }
 
 bool Menu::loadMedia() {
-    // Khởi tạo SDL_ttf
+
     if (TTF_Init() < 0) {
         std::cerr << "SDL_ttf không thể khởi tạo! SDL_ttf Error: " << TTF_GetError() << std::endl;
         return false;
@@ -86,7 +86,7 @@ Menu::MenuResult Menu::handleEvents() {
         }
         else if (event.type == SDL_KEYDOWN) {
             if (!inSettings) {
-                // Xử lý menu chính
+
                 switch (event.key.keysym.sym) {
                     case SDLK_UP:
                         menuItems[selectedItem].selected = false;
@@ -117,7 +117,7 @@ Menu::MenuResult Menu::handleEvents() {
                         break;
                 }
             } else {
-                // Xử lý menu settings
+
                 switch (event.key.keysym.sym) {
                     case SDLK_UP:
                         settingsItems[selectedSettingsItem].selected = false;
@@ -132,9 +132,9 @@ Menu::MenuResult Menu::handleEvents() {
                         break;
 
                     case SDLK_LEFT:
-                        if (selectedSettingsItem == 0) { // Sound Volume
+                        if (selectedSettingsItem == 0) {
                             settingsItems[0].value = max(0, settingsItems[0].value - 10);
-                            // Điều chỉnh âm lượng thực tế
+
                             int volume = (settingsItems[0].value * MIX_MAX_VOLUME) / 100;
                             Mix_VolumeMusic(volume);
                             if (settingsItems[0].value == 0) {
@@ -146,9 +146,8 @@ Menu::MenuResult Menu::handleEvents() {
                         break;
 
                     case SDLK_RIGHT:
-                        if (selectedSettingsItem == 0) { // Sound Volume
+                        if (selectedSettingsItem == 0) {
                             settingsItems[0].value = min(100, settingsItems[0].value + 10);
-                            // Điều chỉnh âm lượng thực tế
                             int volume = (settingsItems[0].value * MIX_MAX_VOLUME) / 100;
                             Mix_VolumeMusic(volume);
                             if (settingsItems[0].value > 0) {
@@ -159,7 +158,7 @@ Menu::MenuResult Menu::handleEvents() {
 
                     case SDLK_RETURN:
                     case SDLK_SPACE:
-                        if (selectedSettingsItem == 1) { // Back button
+                        if (selectedSettingsItem == 1) {
                             inSettings = false;
                             return BACK;
                         }
@@ -178,7 +177,6 @@ Menu::MenuResult Menu::handleEvents() {
 }
 
 void Menu::render() {
-    // Vẽ background
     if (backgroundTexture) {
         SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
     } else {
@@ -187,13 +185,10 @@ void Menu::render() {
     }
 
     if (!inSettings) {
-        // Vẽ title
         if (titleTexture) {
             SDL_Rect titleRect = {SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 4, 300, 60};
             SDL_RenderCopy(renderer, titleTexture, NULL, &titleRect);
         }
-
-        // Vẽ các mục menu chính
         for (size_t i = 0; i < menuItems.size(); i++) {
             SDL_Color textColor = menuItems[i].selected ? SDL_Color{255, 255, 255, 255} : SDL_Color{150, 150, 150, 255};
             SDL_Texture* itemTexture = createTextTexture(menuItems[i].text, textColor);
@@ -221,7 +216,6 @@ void Menu::render() {
 }
 
 void Menu::renderSettings() {
-    // Vẽ title cho settings
     SDL_Color titleColor = {255, 255, 0, 255};
     SDL_Texture* settingsTitle = createTextTexture("SETTINGS", titleColor);
     if (settingsTitle) {
@@ -230,25 +224,25 @@ void Menu::renderSettings() {
         SDL_DestroyTexture(settingsTitle);
     }
 
-    // Vẽ các mục settings
+
     for (size_t i = 0; i < settingsItems.size(); i++) {
         SDL_Color textColor = settingsItems[i].selected ? SDL_Color{255, 255, 255, 255} : SDL_Color{150, 150, 150, 255};
-        
-        // Tạo text hiển thị
+
+
         std::string displayText = settingsItems[i].text;
-        if (i == 0) { // Sound Volume
+        if (i == 0) {
             displayText += ": " + std::to_string(settingsItems[i].value) + "%";
         }
-        
+
         SDL_Texture* itemTexture = createTextTexture(displayText, textColor);
         if (itemTexture) {
             SDL_RenderCopy(renderer, itemTexture, NULL, &settingsItems[i].rect);
             SDL_DestroyTexture(itemTexture);
         }
 
-        // Vẽ thanh điều chỉnh cho âm lượng
+
         if (i == 0) {
-            // Vẽ nền thanh âm lượng
+
             SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
             SDL_Rect barRect = {
                 settingsItems[i].rect.x,
@@ -258,7 +252,6 @@ void Menu::renderSettings() {
             };
             SDL_RenderFillRect(renderer, &barRect);
 
-            // Vẽ thanh âm lượng hiện tại
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
             barRect.w = (settingsItems[i].value * settingsItems[i].rect.w) / 100;
             SDL_RenderFillRect(renderer, &barRect);

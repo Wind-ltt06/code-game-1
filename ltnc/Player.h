@@ -14,20 +14,20 @@ public:
     int x, y;
     int dirX, dirY;
     SDL_Rect rect;
-    SDL_Texture* texture;  // Texture cho tank
-    SDL_Texture* upTexture;    // Texture cho hướng lên
-    SDL_Texture* downTexture;  // Texture cho hướng xuống
-    SDL_Texture* leftTexture;  // Texture cho hướng trái
-    SDL_Texture* rightTexture; // Texture cho hướng phải
+    SDL_Texture* texture;
+    SDL_Texture* upTexture;
+    SDL_Texture* downTexture;
+    SDL_Texture* leftTexture;
+    SDL_Texture* rightTexture;
     SDL_Texture* bulletTexture;
     const int TANK_WIDTH = 30;
     const int TANK_HEIGHT = 30;
 
     std::vector<Bullet> bullets;
-    const int maxBullets = 5;  // Số đạn tối đa
-    const Uint32 reloadTime = 3000;  // Thời gian delay 3 giây (3000ms)
-    Uint32 lastShotTime = 0;  // Thời điểm bắn viên đạn cuối cùng
-    int bulletsShot = 0;  // Số đạn đã bắn
+    const int maxBullets = 5;
+    const Uint32 reloadTime = 3000;
+    Uint32 lastShotTime = 0;
+    int bulletsShot = 0;
     int speed;
     bool keyPressed;
 
@@ -57,21 +57,20 @@ public:
         if (rightTexture) SDL_DestroyTexture(rightTexture);
 
 
-        // Load các texture cho 4 hướng
+
         upTexture = loadTexture(renderer, "player/tankup.jpg");
         downTexture = loadTexture(renderer, "player/tankdown.jpg");
         leftTexture = loadTexture(renderer, "player/tankleft.jpg");
         rightTexture = loadTexture(renderer, "player/tankright.jpg");
          bulletTexture = loadTexture(renderer, "player/bullet.png");
 
-        // Mặc định tank hướng lên
+
         texture = upTexture;
 
-        // Kiểm tra nếu load thành công
+
         return (upTexture && downTexture && leftTexture && rightTexture);
     }
 
-    // Hàm để load một texture từ file
     SDL_Texture* loadTexture(SDL_Renderer* renderer, const std::string& path) {
         SDL_Surface* surface = IMG_Load(path.c_str());
         if (!surface) {
@@ -90,12 +89,12 @@ public:
     }
 
     void move(int dx, int dy, const std::vector<Wall>& walls) {
-        // Nếu có thay đổi hướng, cập nhật hướng của tank
+
         if (dx != 0 || dy != 0) {
             dirX = dx > 0 ? 1 : (dx < 0 ? -1 : 0);
             dirY = dy > 0 ? 1 : (dy < 0 ? -1 : 0);
 
-            // Cập nhật texture tương ứng với hướng
+
             if (dirX == 0 && dirY == -1) texture = upTexture;
             else if (dirX == 0 && dirY == 1) texture = downTexture;
             else if (dirX == -1 && dirY == 0) texture = leftTexture;
@@ -106,7 +105,6 @@ public:
         int newX = x + dx * speed;
         int newY = y + dy * speed;
 
-        // Kiểm tra va chạm với tường theo từng trục
         bool canMoveX = true;
         bool canMoveY = true;
 
@@ -123,7 +121,7 @@ public:
             }
         }
 
-        // Kiểm tra biên màn hình và cập nhật vị trí
+
         if (canMoveX && newX >= TILE_SIZE && newX <= SCREEN_WIDTH - TILE_SIZE * 2) {
             x = newX;
         }
@@ -131,30 +129,26 @@ public:
             y = newY;
         }
 
-        // Cập nhật rect
+
           rect = {x, y, TANK_WIDTH, TANK_HEIGHT};
     }
 
  void shoot() {
     Uint32 currentTime = SDL_GetTicks();
-    
-    // Kiểm tra nếu đã bắn đủ 5 viên
+
     if (bulletsShot >= maxBullets) {
-        // Kiểm tra thời gian delay
+
         if (currentTime - lastShotTime < reloadTime) {
-            return;  // Chưa đủ thời gian delay
+            return;
         }
-        // Reset số đạn đã bắn và thời gian
         bulletsShot = 0;
         lastShotTime = currentTime;
     }
 
-    // Kiểm tra thời gian giữa các lần bắn
-    if (currentTime - lastShotTime < 200) {  // Delay 200ms giữa các viên đạn
+    if (currentTime - lastShotTime < 200) {
         return;
     }
 
-    // Bắn đạn mới
     bullets.push_back(Bullet(x + TANK_WIDTH/2 - 5, y + TANK_HEIGHT/2 - 5, dirX, dirY, 3, bulletTexture));
     lastShotTime = currentTime;
     bulletsShot++;
@@ -171,15 +165,15 @@ public:
 
     void render(SDL_Renderer* renderer) {
         if (texture) {
-            // Render texture của tank
+
             SDL_RenderCopy(renderer, texture, NULL, &rect);
         } else {
-            // Fallback nếu không có texture
+
             SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
             SDL_RenderFillRect(renderer, &rect);
         }
 
-        // Render các viên đạn
+
         for (auto &bullet : bullets) {
             bullet.render(renderer);
         }

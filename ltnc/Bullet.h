@@ -39,7 +39,7 @@ public:
     // Kiểm tra va chạm với tường
     for (const auto& wall : walls) {
         if (wall.active && SDL_HasIntersection(&rect, &wall.rect)) {
-            active = false; // Đạn biến mất, nhưng tường vẫn còn
+            active = false;
             return;
         }
     }

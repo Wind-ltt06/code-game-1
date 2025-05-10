@@ -131,7 +131,7 @@ public:
     spawnEnemies();
         updateScoreTexture();
 }
-
+//hàm tạo map
 void generateWalls(){
     for (int i = 3; i < MAP_HEIGHT - 3; i += 2){
         for (int j = 3; j < MAP_WIDTH - 3; j += 2){
@@ -140,13 +140,13 @@ void generateWalls(){
         }
     }
 }
-// hàm di chuyển và bắn đạn
+// hàm điều khiển
     void handleEvents() {
         if (state == MENU) {
             Menu::MenuResult result = menu->handleEvents();
             switch (result) {
                 case Menu::PLAY:
-                    // Reset game state when starting new game
+                    // bắt đầu lại game khi new game
                     state = PLAYING;
                     score = 0;
                     updateScoreTexture();
@@ -154,7 +154,7 @@ void generateWalls(){
                     player.x = ((MAP_WIDTH - 1) / 2) * TILE_SIZE;
                     player.y = (MAP_HEIGHT - 2) * TILE_SIZE;
                     player.bullets.clear();
-                    // Reset walls and enemies
+
                     walls.clear();
                     generateWalls();
                     enemies.clear();
@@ -205,15 +205,15 @@ void generateWalls(){
                 else if (event.type == SDL_KEYDOWN) {
                     switch (event.key.keysym.sym) {
                         case SDLK_r:
-                            // Restart game
+
                             state = PLAYING;
                             score = 0;
                             updateScoreTexture();
-                            // Reset player position
+
                             player.x = ((MAP_WIDTH - 1) / 2) * TILE_SIZE;
                             player.y = (MAP_HEIGHT - 2) * TILE_SIZE;
                             player.bullets.clear();
-                            // Reset walls and enemies
+
                             walls.clear();
                             generateWalls();
                             enemies.clear();
@@ -249,7 +249,7 @@ void generateWalls(){
                     enemy.active = false;
                     bullet.active = false;
                     score += 100;
-                    updateScoreTexture(); // Cập nhật text sau khi cộng điểm
+                    updateScoreTexture();
 
                     // Sinh thêm enemy tank mới
                     int ex, ey;
@@ -297,7 +297,7 @@ void generateWalls(){
         for(auto& enemy : enemies){
             for(auto& bullet : enemy.bullets){
                 if(SDL_HasIntersection(&bullet.rect, &player.rect)){
-                    state = GAME_OVER;  // Thay đổi từ MENU thành GAME_OVER
+                    state = GAME_OVER;
                     return;
                 }
             }

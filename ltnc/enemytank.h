@@ -27,7 +27,7 @@ public:
     bool active;
     std::vector<Bullet> bullets;
 
-    // Hàm khởi tạo (constructor)
+
    EnemyTank(int startX, int startY, SDL_Renderer* renderer) {
     x = startX;
     y = startY;
@@ -38,7 +38,7 @@ public:
     moveCooldown = 15;
     shootDelay = 30;
 
-    // Load texture cho enemy
+
     upTexture = loadTexture(renderer, "player/enermytankup.jpg");
     downTexture = loadTexture(renderer, "player/enermytankdown.jpg");
     leftTexture = loadTexture(renderer, "player/enermytankleft.jpg");
@@ -68,26 +68,23 @@ public:
     for (const auto& bullet : playerBullets) {
         if (!bullet.active) continue;
 
-        // Tính khoảng cách từ đạn đến tank
         int distX = bullet.x - x;
         int distY = bullet.y - y;
 
-        // Dự đoán vị trí viên đạn trong tương lai
-        int futureX = bullet.x + bullet.dx * 10;  // Dự đoán 10 bước
+
+        int futureX = bullet.x + bullet.dx * 10;
         int futureY = bullet.y + bullet.dy * 10;
 
-        // Kiểm tra nếu đạn sẽ gặp tank trong tương lai gần
         bool willHitX = (bullet.dx > 0 && x > bullet.x && x < futureX) ||
                         (bullet.dx < 0 && x < bullet.x && x > futureX);
         bool willHitY = (bullet.dy > 0 && y > bullet.y && y < futureY) ||
                         (bullet.dy < 0 && y < bullet.y && y > futureY);
 
-        // Đạn đang đi theo chiều ngang và sẽ đi qua vị trí Y của tank
         if (bullet.dx != 0 && abs(y - bullet.y) < TILE_SIZE && willHitX) {
             return true;
         }
 
-        // Đạn đang đi theo chiều dọc và sẽ đi qua vị trí X của tank
+
         if (bullet.dy != 0 && abs(x - bullet.x) < TILE_SIZE && willHitY) {
             return true;
         }
@@ -98,23 +95,21 @@ public:
 void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::vector<Bullet>& playerBullets) {
     if (moveCooldown > 0) {
         moveCooldown--;
-        return;  // Chưa hết cooldown, không di chuyển
+        return;
     }
-    moveCooldown = 15;  // Reset cooldown
+    moveCooldown = 15;
 
      updateTextureBasedOnDirection();
 
-    // Kiểm tra xem có đạn gần không
     bool isDanger = isDangerNearby(playerBullets);
 
-    // Các hướng di chuyển: lên, xuống, trái, phải
-    std::vector<std::pair<int, int>> directions = {{0, -5}, {0, 5}, {-5, 0}, {5, 0}};
 
-    // Xáo trộn hướng di chuyển để tăng tính ngẫu nhiên
+    std::vector<std::pair<int, int>> directions = {{0, -10}, {0, 10}, {-10, 0}, {10, 0}};
+
     std::random_shuffle(directions.begin(), directions.end());
 
     if (isDanger) {
-        // Nếu có nguy hiểm, tìm hướng tốt nhất để né đạn
+
         int bestDx = 0, bestDy = 0;
         int safestDistance = 0;
 
@@ -123,7 +118,7 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
             int newY = y + dy;
             SDL_Rect newRect = {newX, newY, TILE_SIZE, TILE_SIZE};
 
-            // Kiểm tra va chạm với tường
+
             bool collision = false;
             for (const auto& wall : walls) {
                 if (wall.active && SDL_HasIntersection(&newRect, &wall.rect)) {
@@ -132,33 +127,31 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
                 }
             }
 
-            // Kiểm tra biên màn hình
+
             bool inBounds = (newX >= TILE_SIZE && newX <= SCREEN_WIDTH - TILE_SIZE * 2 &&
                             newY >= TILE_SIZE && newY <= SCREEN_HEIGHT - TILE_SIZE * 2);
 
             if (!collision && inBounds) {
-                // Tính toán mức độ an toàn của vị trí mới
+
                 int safetyScore = 0;
 
                 for (const auto& bullet : playerBullets) {
                     if (!bullet.active) continue;
 
-                    // Khoảng cách từ vị trí mới đến đạn
+
                     int bulletDistX = abs(bullet.x - newX);
                     int bulletDistY = abs(bullet.y - newY);
 
-                    // Đạn càng xa càng an toàn
                     safetyScore += bulletDistX + bulletDistY;
 
-                    // Tránh di chuyển theo hướng đạn đang bay tới
                     if ((bullet.dx > 0 && dx > 0) ||
                         (bullet.dx < 0 && dx < 0) ||
                         (bullet.dy > 0 && dy > 0) ||
                         (bullet.dy < 0 && dy < 0)) {
-                        safetyScore -= 50; // Phạt nặng nếu di chuyển theo hướng đạn
+                        safetyScore -= 50;
                     }
 
-                    // Thưởng nếu di chuyển vuông góc với hướng đạn
+
                     if ((bullet.dx != 0 && dy != 0) || (bullet.dy != 0 && dx != 0)) {
                         safetyScore += 30;
                     }
@@ -172,7 +165,7 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
             }
         }
 
-        // Di chuyển theo hướng an toàn nhất
+
         if (bestDx != 0 || bestDy != 0) {
             x += bestDx;
             y += bestDy;
@@ -182,8 +175,8 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
             dirY = (bestDy != 0) ? bestDy / abs(bestDy) : 0;
         }
     } else {
-        // Không có nguy hiểm, đi về phía người chơi với xác suất cao
-        if (rand() % 100 < 70) { // 70% thời gian di chuyển về phía người chơi
+
+        if (rand() % 100 < 70) {
             int bestDx = 0, bestDy = 0;
             int shortestDistance = abs(x - playerX) + abs(y - playerY);
 
@@ -211,7 +204,7 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
                 }
             }
 
-            // Di chuyển theo hướng tốt nhất
+
             if (bestDx != 0 || bestDy != 0) {
                 x += bestDx;
                 y += bestDy;
@@ -221,7 +214,6 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
                 dirY = (bestDy != 0) ? bestDy / abs(bestDy) : 0;
             }
         } else {
-            // 30% thời gian di chuyển ngẫu nhiên
             for (auto [dx, dy] : directions) {
                 int newX = x + dx;
                 int newY = y + dy;
@@ -265,10 +257,9 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
         newTexture = rightTexture;
     }
 
-    // Chỉ đổi nếu khác với texture hiện tại
     if (newTexture != texture) {
         texture = newTexture;
-        // SDL_Log("⚡ Đổi texture enemy tank theo hướng (%d, %d)", dirX, dirY);
+
     }
 }
 
@@ -279,8 +270,6 @@ void shoot() {
         return;
     }
     shootDelay = 30;
-
-    // Truyền bulletTexture khi tạo đạn
     bullets.push_back(Bullet(x + 15, y + 15, dirX, dirY, 10, bulletTexture));
 }
 
@@ -303,7 +292,7 @@ void shoot() {
         SDL_RenderFillRect(renderer, &rect);
     }
 
-    // Thêm vào để vẽ đạn
+
     for (auto &bullet : bullets) {
         bullet.render(renderer);
     }
