@@ -7,7 +7,7 @@
 	"defs.h"
 	<bits/stdc++.h>
 
-1746578801 c:\git\code-game-1\ltnc\graphics.h
+1746854489 c:\git\code-game-1\ltnc\graphics.h
 	<SDL.h>
 	<SDL_image.h>
 	"defs.h"
@@ -22,13 +22,13 @@
 
 1745250635 c:\git\code-game-1\ltnc\defs.h
 
-1745371547 c:\git\code-game-1\ltnc\wall.h
+1746848210 c:\git\code-game-1\ltnc\wall.h
 	<SDL.h>
 	<SDL_image.h>
 	"defs.h"
 	<string>
 
-1745371547 c:\git\code-game-1\ltnc\player.h
+1746854458 c:\git\code-game-1\ltnc\player.h
 	<SDL.h>
 	<SDL_image.h>
 	"defs.h"
@@ -53,7 +53,7 @@
 	<algorithm>
 	<cstdlib>
 
-1745333828 c:\git\code-game-1\ltnc\menu.h
+1746851421 c:\git\code-game-1\ltnc\menu.h
 	<SDL.h>
 	<SDL_image.h>
 	<string>
@@ -61,8 +61,9 @@
 	"defs.h"
 	<SDL_ttf.h>
 	<bits/stdc++.h>
+	<SDL_mixer.h>
 
-1745333828 source:c:\git\code-game-1\ltnc\menu.cpp
+1746851458 source:c:\git\code-game-1\ltnc\menu.cpp
 	"Menu.h"
 	<SDL_ttf.h>
 	<iostream>

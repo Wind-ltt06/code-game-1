@@ -23,11 +23,11 @@ public:
     const int TANK_WIDTH = 30;
     const int TANK_HEIGHT = 30;
 
-
     std::vector<Bullet> bullets;
-    const int maxBullets = 5;
-    const Uint32 reloadTime = 15000;
-    Uint32 lastShotTime = 0;
+    const int maxBullets = 5;  // Số đạn tối đa
+    const Uint32 reloadTime = 3000;  // Thời gian delay 3 giây (3000ms)
+    Uint32 lastShotTime = 0;  // Thời điểm bắn viên đạn cuối cùng
+    int bulletsShot = 0;  // Số đạn đã bắn
     int speed;
     bool keyPressed;
 
@@ -35,7 +35,7 @@ public:
         x = startX;
         y = startY;
         speed = 3;
-       rect = {x, y, TANK_WIDTH, TANK_HEIGHT};
+        rect = {x, y, TANK_WIDTH, TANK_HEIGHT};
         dirX = 0;
         dirY = -1;
         keyPressed = false;
@@ -44,6 +44,8 @@ public:
         downTexture = nullptr;
         leftTexture = nullptr;
         rightTexture = nullptr;
+        bulletsShot = 0;
+        lastShotTime = 0;
     }
 
     // Hàm để load các texture cho tank
@@ -135,14 +137,27 @@ public:
 
  void shoot() {
     Uint32 currentTime = SDL_GetTicks();
-    if (bullets.size() >= maxBullets) {
-        if (currentTime - lastShotTime < reloadTime) return;
-        bullets.clear();
+    
+    // Kiểm tra nếu đã bắn đủ 5 viên
+    if (bulletsShot >= maxBullets) {
+        // Kiểm tra thời gian delay
+        if (currentTime - lastShotTime < reloadTime) {
+            return;  // Chưa đủ thời gian delay
+        }
+        // Reset số đạn đã bắn và thời gian
+        bulletsShot = 0;
+        lastShotTime = currentTime;
     }
 
-    // Truyền bulletTexture khi tạo đạn
+    // Kiểm tra thời gian giữa các lần bắn
+    if (currentTime - lastShotTime < 200) {  // Delay 200ms giữa các viên đạn
+        return;
+    }
+
+    // Bắn đạn mới
     bullets.push_back(Bullet(x + TANK_WIDTH/2 - 5, y + TANK_HEIGHT/2 - 5, dirX, dirY, 3, bulletTexture));
     lastShotTime = currentTime;
+    bulletsShot++;
 }
 
 
