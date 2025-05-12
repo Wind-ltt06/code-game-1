@@ -1,62 +1,39 @@
-Họ và tên : Lê Trọng Thức
-Mã sinh viên : 24021637
-Giới thiệu game: Trong một thành phố bị tàn phá bởi chiến tranh, bạn là hi vọng cuối cùng chống lại làn sóng xe tăng địch không ngừng tiến đến.Hãy điều khiển chiếc xe tăng của mình, phá hủy kẻ thù, bảo vệ căn cứ và trở thành huyền thoại chiến trường!"
-Ngưỡng điểm: 8
-Tự làm những phần nào, phần nào lấy từ các kiểu tutorial/code mẫu
-    Những phần đã làm:
-    + main.ccp
-    + defs.h
-    + graphic.h:
-    + Wall.h
-    + Player.h
-    + Bullet.h
-    Những phần lấy mẫu :
-    + Enermytank 
-    + menu.h
-    + menu.cpp
-
-Liệt kê các nguồn tham khảo (code, hình ảnh, âm thanh...)
-    + chatgpt, youtube
-Dùng các lệnh vẽ hình
-    + Vẽ hình chữ nhật (viền):
-    + Vẽ hình chữ nhật đầy:
-    + Vẽ đường thẳng:
-    + Vẽ điểm
-  
-Texture
-  + Dùng SDL_Texture để chèn các ảnh vào các hàm đã vẽ
-Background
-    + Dùng mapTexture để vẽ background nếu có hình nền
-    + Nếu không có thì sẽ vẽ ra màu xám
-Event bàn phím
-    + DÙng keystate để điều khiển tank và SDL_GetKeyboardState để đọc phím
-    + sử dụng SDL_PollEvent để sử lý bắn cũng như exit game
-Event chuột
-
-Animation (hoạt hình)
-    + sử dụng animation tĩnh để di chuyển tank
-Xử lý va chạm
-    + va chạm giữa đạn và tường
-    + va chạm giữa đạn và player
-    + va chạm giữa đạn và enermy
-Score (có tính điểm)
-    + hàm tính điểm nếu giết được enermy thì sẽ được 100đ
-Lưu bảng điểm
-
-Sound
-    + hàm music bình thường để thêm music
-Sound on off
-Background music
-    + music sẽ chạy từ đầu đến cuối
-
-Font
-    + Font chữ ariel
-Menu
-    + Menu bao gồm starting, setting, exit
-
-Pause/Resume
-    + nếu thua thì game sẽ tự động out ra
-Status bar / lives (mạng/máu...)
-    + đây là game 1 mạng
-Các điểm nổi bật khác
-    + Phân chia modul rõ ràng nên khi có việc gì rất dễ fix
+BATTLE TANK: Bài tập tập lập trình nâng cao INT2215
+![alt text](image.png)
+I. Thông tin tác giả
+Họ và tên: Lê Trọng Thức
+Mã số sinh viên: 24021637
+Lớp: K69I - CS1
+II. Tổng quan
+Thể loại: Action.
+Nền tảng: PC.
+Ngôn ngữ / Thư viện sử dụng: C++ / SDL2.
+Tóm tắt: Battle Tank là một trò chơi hành động bắn súng kết hợp mô phỏng nhẹ, lấy bối cảnh Thế chiến thứ II.  
+Người chơi điều khiển một chiếc xe tăng, tiêu diệt kẻ địch để ghi điểm (+100 điểm mỗi mục tiêu) và cố gắng đạt điểm số cao nhất.  
+Trò chơi mang phong cách arcade, đề cao sự khéo léo trong điều khiển và chiến thuật tấn công.
+Ngưỡng điểm: 8.5 - 9
+III. Các điểm nổi bật của Game.
+1. Kiến trúc Game Engine
+Dự án tập trung vào việc thiết kế một kiến trúc game engine đơn giản sử dụng SDL2, với cấu trúc rõ ràng và hướng đến tính mô-đun hoá cao. Hệ thống được tổ chức quanh các class manager tự động, giúp điều phối các thành phần chính của trò chơi một cách hiệu quả:
+![alt text](image-1.png)
+Nhờ nền tảng kiến trúc được xây dựng bài bản ngay từ đầu, việc tích hợp và mở rộng các chức năng trong game trở nên linh hoạt, dễ dàng. Game loop được tổ chức chặt chẽ, đảm bảo quá trình xử lý diễn ra mượt mà và nhất quán.
+2. Bắn đạn thông minh
+- Có hệ thống cooldown
+- Giới hạn số đạn tối đa
+- Có thời gian reload
+- Tính toán vị trí bắn chính xác từ trung tâm tank
+3. Né đạn thông minh
+- Dự đoán quỹ đạo đạn
+- Tính toán va chạm tương lai
+- AI né đạn thông minh
+- Tối ưu hiệu suất bằng cách bỏ qua đạn không active
+4. Hệ thông sinh enermy tank khoa học
+- Đảm bảo enemy không spawn trùng với tường
+- Giữ khoảng cách an toàn với player
+- Sử dụng vòng lặp while để tìm vị trí hợp lệ
+IV. Tài liệu tham khảo
+- Tham khảo Code mẫu trên Lazy Foo' Productions.
+- Tham khảo Code mẫu trên File tài liệu do giảng viên cung cấp.
+- Tham khảo Code mẫu trên trang chính thức của SDL2.
+- Hình ảnh được lấy từ game battle tank
+- Âm thanh lấy bất kì từ trên youtube
