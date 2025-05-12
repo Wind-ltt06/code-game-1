@@ -7,7 +7,7 @@
 	"defs.h"
 	<bits/stdc++.h>
 
-1746880452 c:\git\code-game-1\ltnc\graphics.h
+1747063974 c:\git\code-game-1\ltnc\graphics.h
 	<SDL.h>
 	<SDL_image.h>
 	"defs.h"
@@ -63,7 +63,7 @@
 	<bits/stdc++.h>
 	<SDL_mixer.h>
 
-1746851458 source:c:\git\code-game-1\ltnc\menu.cpp
+1746880697 source:c:\git\code-game-1\ltnc\menu.cpp
 	"Menu.h"
 	<SDL_ttf.h>
 	<iostream>

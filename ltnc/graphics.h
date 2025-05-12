@@ -330,27 +330,28 @@ void generateWalls(){
     }
 
     void updateScoreTexture() {
-    if (scoreTexture) SDL_DestroyTexture(scoreTexture);
+        if (scoreTexture) SDL_DestroyTexture(scoreTexture);
 
-    SDL_Color textColor = {255, 255, 255, 255};
-    std::string scoreText = "Score: " + std::to_string(score);
+        SDL_Color textColor = {255, 255, 255, 255};
+        std::string scoreText = "Score: " + std::to_string(score);
 
-    SDL_Surface* surface = TTF_RenderText_Solid(font, scoreText.c_str(), textColor);
-    if (!surface) {
-        SDL_Log("Không thể tạo surface score! %s", TTF_GetError());
-        return;
+        SDL_Surface* surface = TTF_RenderText_Solid(font, scoreText.c_str(), textColor);
+        if (!surface) {
+            SDL_Log("Không thể tạo surface score! %s", TTF_GetError());
+            return;
+        }
+
+        scoreTexture = SDL_CreateTextureFromSurface(renderer, surface);
+        SDL_FreeSurface(surface);
+
+        if (!scoreTexture) {
+            SDL_Log("Không thể tạo texture score! %s", SDL_GetError());
+            return;
+        }
+
+
+        scoreRect = {SCREEN_WIDTH - surface->w - 20, 20, surface->w, surface->h};
     }
-
-    scoreTexture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface);
-
-    if (!scoreTexture) {
-        SDL_Log("Không thể tạo texture score! %s", SDL_GetError());
-        return;
-    }
-
-    scoreRect = {10, 10, surface->w, surface->h}; // Góc trái trên
-}
 
 // hàm sinh kẻ thù
     void spawnEnemies() {
@@ -393,10 +394,6 @@ void generateWalls(){
             SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255);
             SDL_RenderClear(renderer);
 
-            if (scoreTexture) {
-                SDL_RenderCopy(renderer, scoreTexture, NULL, &scoreRect);
-            }
-
             // Vẽ map
             if (mapTexture) {
                 SDL_Rect mapRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
@@ -412,6 +409,11 @@ void generateWalls(){
 
             for (auto& enemy : enemies) {
                 enemy.render(renderer);
+            }
+
+            // Vẽ điểm số ở góc phải trên
+            if (scoreTexture) {
+                SDL_RenderCopy(renderer, scoreTexture, NULL, &scoreRect);
             }
 
             SDL_RenderPresent(renderer);
@@ -436,15 +438,31 @@ void generateWalls(){
                 SDL_FreeSurface(surface);
             }
 
-            // Vẽ các lựa chọn
+            // Vẽ tổng điểm
             textColor = {255, 255, 255, 255}; // Màu trắng
+            std::string finalScoreText = "Final Score: " + std::to_string(score);
+            surface = TTF_RenderText_Solid(font, finalScoreText.c_str(), textColor);
+            if (surface) {
+                SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+                SDL_Rect rect = {
+                    SCREEN_WIDTH/2 - surface->w/2,
+                    SCREEN_HEIGHT/3 + 50,
+                    surface->w,
+                    surface->h
+                };
+                SDL_RenderCopy(renderer, texture, NULL, &rect);
+                SDL_DestroyTexture(texture);
+                SDL_FreeSurface(surface);
+            }
+
+            // Vẽ các lựa chọn
             std::string restartText = "Press R to Restart";
             surface = TTF_RenderText_Solid(font, restartText.c_str(), textColor);
             if (surface) {
                 SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
                 SDL_Rect rect = {
                     SCREEN_WIDTH/2 - surface->w/2,
-                    SCREEN_HEIGHT/2 - surface->h/2,
+                    SCREEN_HEIGHT/2,
                     surface->w,
                     surface->h
                 };
