@@ -47,3 +47,4 @@ IV. Tài liệu tham khảo
 - Tham khảo Code mẫu trên trang chính thức của SDL2.
 - Hình ảnh được lấy từ game battle tank
 - Âm thanh lấy bất kì từ trên youtube
+- Tham khảo code https://github.com/krystiankaluzny/Tanks
