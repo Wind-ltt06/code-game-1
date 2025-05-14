@@ -254,14 +254,14 @@ void generateWalls(){
                     score += 100;
                     updateScoreTexture();
 
-                    // Sinh thêm enemy tank mới
+
                     int ex, ey;
                     bool validPosition = false;
                     while(!validPosition) {
                         ex = (rand() % (MAP_WIDTH - 2) + 1) * TILE_SIZE;
                         ey = (rand() % (MAP_HEIGHT - 2) + 1) * TILE_SIZE;
 
-                        // Kiểm tra xem vị trí có phù hợp với kích thước tank mới không
+
                         validPosition = true;
                         SDL_Rect tempRect = {ex, ey, 30, 30};
 
@@ -272,13 +272,13 @@ void generateWalls(){
                             }
                         }
 
-                        // Kiểm tra khoảng cách với player
+
                         int distToPlayer = abs(ex - player.x) + abs(ey - player.y);
                         if (distToPlayer < 4 * TILE_SIZE) {
                             validPosition = false;
                         }
 
-                        // Kiểm tra khoảng cách với các enemy khác
+
                         for (const auto& otherEnemy : enemies) {
                             if (otherEnemy.active) {
                                 int distToEnemy = abs(ex - otherEnemy.x) + abs(ey - otherEnemy.y);
@@ -296,7 +296,7 @@ void generateWalls(){
 
         enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](EnemyTank &e) {return !e.active;}), enemies.end());
 
-        // va chạm giữa đạn enermy và người chơi
+
         for(auto& enemy : enemies){
             for(auto& bullet : enemy.bullets){
                 if(SDL_HasIntersection(&bullet.rect, &player.rect)){
@@ -306,11 +306,10 @@ void generateWalls(){
             }
         }
 
-        // tỉ lệ bắn dạn của enermy tank
         for (auto &enemy : enemies) {
             enemy.move(walls, player.x, player.y, player.bullets);
             enemy.updateBullets(walls);
-            if (rand() % 100 < 90) {  // Xác suất 90% để bắn
+            if (rand() % 100 < 90) {
                 enemy.shoot();
             }
         }
@@ -332,7 +331,7 @@ void generateWalls(){
         }
     }
 
-// update bảng điểm
+
     void updateScoreTexture() {
         if (scoreTexture) SDL_DestroyTexture(scoreTexture);
 
@@ -357,7 +356,7 @@ void generateWalls(){
         scoreRect = {SCREEN_WIDTH - surface->w - 20, 20, surface->w, surface->h};
     }
 
-// hàm sinh kẻ thù
+
     void spawnEnemies() {
     enemies.clear();
     for (int i = 0; i < enemyNumber; i++) {
@@ -367,7 +366,6 @@ void generateWalls(){
             ex = (rand() % (MAP_WIDTH - 2) + 1) * TILE_SIZE;
             ey = (rand() % (MAP_HEIGHT - 2) + 1) * TILE_SIZE;
 
-            // Kiểm tra xem vị trí có phù hợp với kích thước tank mới không
             validPosition = true;
             SDL_Rect tempRect = {ex, ey, 30, 30};
 
@@ -378,7 +376,7 @@ void generateWalls(){
                 }
             }
 
-            // Kiểm tra khoảng cách với player
+
             int distToPlayer = abs(ex - player.x) + abs(ey - player.y);
             if (distToPlayer < 4 * TILE_SIZE) {
                 validPosition = false;

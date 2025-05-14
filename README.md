@@ -25,17 +25,17 @@ Nhờ nền tảng kiến trúc được xây dựng bài bản ngay từ đầu
 - Có hệ thống cooldown
 - Giới hạn số đạn tối đa
 - Có thời gian reload
-- Tính toán vị trí bắn chính xác từ trung tâm tank
-
+- Tính toán vị trí bắn từ trung tâm tank
+![alt text](image-2.png)
 
 3. Né đạn và di chuyển đến player
 - Dự đoán quỹ đạo đạn
 - Tính toán va chạm tương lai
 - Né đạn
 - Tối ưu hiệu suất bằng cách bỏ qua đạn không active
+![alt text](image-3.png)
 
-
-4. Hệ thông sinh enermy tank khoa học
+4. Hệ thông sinh enermy tank
 - Đảm bảo enemy không spawn trùng với tường
 - Giữ khoảng cách an toàn với player
 - Sử dụng vòng lặp while để tìm vị trí hợp lệ

@@ -172,7 +172,7 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
         }
     } else {
 
-        if (rand() % 100 < 50) {
+        if (rand() % 100 < 99) {
             int bestDx = 0, bestDy = 0;
             int shortestDistance = abs(x - playerX) + abs(y - playerY);
 
