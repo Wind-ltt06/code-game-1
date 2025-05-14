@@ -109,7 +109,6 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
     std::random_shuffle(directions.begin(), directions.end());
 
     if (isDanger) {
-
         int bestDx = 0, bestDy = 0;
         int safestDistance = 0;
 
@@ -119,6 +118,7 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
             SDL_Rect newRect = {newX, newY, TILE_SIZE, TILE_SIZE};
 
 
+
             bool collision = false;
             for (const auto& wall : walls) {
                 if (wall.active && SDL_HasIntersection(&newRect, &wall.rect)) {
@@ -126,23 +126,19 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
                     break;
                 }
             }
-
-
             bool inBounds = (newX >= TILE_SIZE && newX <= SCREEN_WIDTH - TILE_SIZE * 2 &&
                             newY >= TILE_SIZE && newY <= SCREEN_HEIGHT - TILE_SIZE * 2);
 
+
+
             if (!collision && inBounds) {
-
                 int safetyScore = 0;
-
                 for (const auto& bullet : playerBullets) {
                     if (!bullet.active) continue;
-
-
                     int bulletDistX = abs(bullet.x - newX);
                     int bulletDistY = abs(bullet.y - newY);
-
                     safetyScore += bulletDistX + bulletDistY;
+
 
                     if ((bullet.dx > 0 && dx > 0) ||
                         (bullet.dx < 0 && dx < 0) ||
@@ -153,7 +149,7 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
 
 
                     if ((bullet.dx != 0 && dy != 0) || (bullet.dy != 0 && dx != 0)) {
-                        safetyScore += 30;
+                        safetyScore += 50;
                     }
                 }
 
@@ -176,7 +172,7 @@ void move(const std::vector<Wall>& walls, int playerX, int playerY, const std::v
         }
     } else {
 
-        if (rand() % 100 < 70) {
+        if (rand() % 100 < 50) {
             int bestDx = 0, bestDy = 0;
             int shortestDistance = abs(x - playerX) + abs(y - playerY);
 

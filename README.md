@@ -28,10 +28,10 @@ Nhờ nền tảng kiến trúc được xây dựng bài bản ngay từ đầu
 - Tính toán vị trí bắn chính xác từ trung tâm tank
 
 
-3. Né đạn thông minh
+3. Né đạn và di chuyển đến player
 - Dự đoán quỹ đạo đạn
 - Tính toán va chạm tương lai
-- AI né đạn thông minh
+- Né đạn
 - Tối ưu hiệu suất bằng cách bỏ qua đạn không active
 
 

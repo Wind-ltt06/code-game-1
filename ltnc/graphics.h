@@ -131,6 +131,11 @@ public:
     spawnEnemies();
         updateScoreTexture();
 }
+
+
+
+
+
 //hàm tạo map
 void generateWalls(){
     for (int i = 3; i < MAP_HEIGHT - 3; i += 2){
@@ -140,21 +145,19 @@ void generateWalls(){
         }
     }
 }
+
 // hàm điều khiển
     void handleEvents() {
         if (state == MENU) {
             Menu::MenuResult result = menu->handleEvents();
             switch (result) {
                 case Menu::PLAY:
-                    // bắt đầu lại game khi new game
                     state = PLAYING;
                     score = 0;
                     updateScoreTexture();
-                    // Reset player position
                     player.x = ((MAP_WIDTH - 1) / 2) * TILE_SIZE;
                     player.y = (MAP_HEIGHT - 2) * TILE_SIZE;
                     player.bullets.clear();
-
                     walls.clear();
                     generateWalls();
                     enemies.clear();
@@ -329,6 +332,7 @@ void generateWalls(){
         }
     }
 
+// update bảng điểm
     void updateScoreTexture() {
         if (scoreTexture) SDL_DestroyTexture(scoreTexture);
 
